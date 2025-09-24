@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظالدراسية</title>
+    <title>نظام المواد الدراسية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -33,23 +33,17 @@
 </head>
 <body class="bg-gray-900 min-h-screen text-white">
     <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold mb-2">نظام المواد الدراسية</h1>
             <p class="text-gray-300">إدارة المحتوى التعليمي للثانوية العامة</p>
         </div>
 
-        <!-- Breadcrumb -->
         <div class="bg-gray-800 p-4 rounded-lg mb-6 flex items-center flex-wrap gap-2" id="breadcrumb">
-            <!-- Breadcrumb will be generated here -->
-        </div>
+            </div>
 
-        <!-- Content Area -->
         <div class="bg-gray-800 rounded-lg shadow-xl p-6 min-h-[500px]" id="contentArea">
-            <!-- Content will be loaded here -->
-        </div>
+            </div>
 
-        <!-- Action Buttons -->
         <div class="flex gap-3 justify-end mt-6" id="actionButtons" style="display: none;">
             <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition duration-200" onclick="cancelChanges()">
                 إلغاء التعديلات
@@ -60,7 +54,6 @@
         </div>
     </div>
 
-    <!-- Add Item Modal -->
     <div id="addItemModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md mx-4">
             <h3 class="text-xl font-bold mb-4" id="modalTitle">إضافة جديد</h3>
@@ -79,7 +72,7 @@
                 </div>
                 <div id="contentField" class="hidden">
                     <label class="block text-sm font-medium mb-2">المحتوى/الرابط:</label>
-                    <textarea id="itemContent" placeholder="أدخل المحتوى النصي أو رابط اليوتيوب" rows="4" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"></textarea>
+                    <textarea type="text" id="itemContent" placeholder="أدخل المحتوى النصي أو رابط اليوتيوب" rows="4" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"></textarea>
                 </div>
                 <div class="flex items-center">
                     <input type="checkbox" id="isPrivate" onchange="toggleContentFields()" class="ml-2">
@@ -101,7 +94,6 @@
         </div>
     </div>
 
-    <!-- Password Modal -->
     <div id="passwordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md mx-4">
             <h3 class="text-xl font-bold mb-4">إدخال كلمة المرور</h3>
@@ -122,7 +114,6 @@
         </div>
     </div>
 
-    <!-- Add Section Modal -->
     <div id="addSectionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md mx-4">
             <h3 class="text-xl font-bold mb-4">إضافة قسم جديد</h3>
@@ -321,61 +312,70 @@
 
             try {
                 const currentLevel = currentPath[currentPath.length - 1];
-                
-                // إذا كان المستوى الحالي هو قسم (section)
+                let dataToLoad = null;
+
+                // Determine the data source based on the path
                 if (currentLevel.type === 'section') {
                     const doc = await db.collection('sections').doc(currentLevel.id).get();
-                    
                     if (doc.exists) {
-                        currentData = doc.data();
-                        updateBreadcrumb();
-                        updateContentArea();
+                        dataToLoad = doc.data();
                     }
-                } 
-                // إذا كان المستوى الحالي هو مادة مشتركة (shared)
-                else if (currentLevel.type === 'shared') {
-                    // تحميل المادة المشتركة من مجموعة sharedSubjects
-                    const subjectDoc = await db.collection('sharedSubjects').doc(currentLevel.sharedId).get();
-                    
-                    if (subjectDoc.exists) {
-                        currentData = subjectDoc.data();
-                        updateBreadcrumb();
-                        updateContentArea();
-                    }
-                }
-                // إذا كان المستوى الحالي هو فولدر عادي (folder)
-                else if (currentLevel.type === 'folder') {
-                    // الفولدرات يتم تخزينها داخل المادة المشتركة أو القسم
+                } else {
                     let parentData = null;
-                    
-                    if (currentPath.length === 1) {
-                        // إذا كان الفولدر مباشرة تحت قسم
+                    if (currentPath[0].type === 'section') {
                         const parentDoc = await db.collection('sections').doc(currentPath[0].id).get();
                         if (parentDoc.exists) {
                             parentData = parentDoc.data();
                         }
-                    } else {
-                        // إذا كان الفولدر داخل مادة مشتركة
-                        const parentDoc = await db.collection('sharedSubjects').doc(currentPath[1].sharedId).get();
-                        if (parentDoc.exists) {
-                            parentData = parentDoc.data();
-                        }
                     }
-                    
-                    if (parentData && parentData.items) {
-                        // البحث عن الفولدر الحالي في العناصر
-                        const currentFolder = parentData.items.find(item => item.id === currentLevel.id);
-                        if (currentFolder) {
-                            currentData = currentFolder;
-                            updateBreadcrumb();
-                            updateContentArea();
-                        }
+
+                    if (parentData) {
+                        dataToLoad = findItemInPath(parentData.items, currentPath.slice(1));
                     }
                 }
+
+                if (dataToLoad) {
+                    currentData = dataToLoad;
+                    updateBreadcrumb();
+                    updateContentArea();
+                } else {
+                    console.error('Data not found for the current path:', currentPath);
+                    alert('حدث خطأ: المحتوى المطلوب غير موجود.');
+                    currentPath.pop(); // Go back one level
+                    loadCurrentPath();
+                }
+
             } catch (error) {
                 console.error('Error loading path:', error);
                 alert('حدث خطأ أثناء تحميل المحتوى');
             }
+        }
+
+        // Helper function to find nested item in the path
+        function findItemInPath(items, path) {
+            let currentItems = items;
+            let foundItem = null;
+
+            for (let i = 0; i < path.length; i++) {
+                const level = path[i];
+                const item = currentItems.find(item => item.id === level.id || (item.sharedId && item.sharedId === level.id));
+
+                if (!item) {
+                    return null;
+                }
+
+                // If it's a shared item, get the real data from sharedSubjects
+                if (item.type === 'shared' && sharedSubjects[item.sharedId]) {
+                    foundItem = sharedSubjects[item.sharedId];
+                    if (i < path.length - 1) {
+                        currentItems = foundItem.items || [];
+                    }
+                } else {
+                    foundItem = item;
+                    currentItems = item.items || [];
+                }
+            }
+            return foundItem;
         }
 
         // Update content area based on current data
@@ -868,4 +868,3 @@
     </script>
 </body>
 </html>
-
