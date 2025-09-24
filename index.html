@@ -237,12 +237,46 @@
 
             try {
                 const currentLevel = currentPath[currentPath.length - 1];
-                const doc = await db.collection('sections').doc(currentLevel.id).get();
                 
-                if (doc.exists) {
-                    currentData = doc.data();
-                    updateBreadcrumb();
-                    updateContentArea();
+                // إذا كان المستوى الحالي هو قسم (section)
+                if (currentLevel.type === 'section') {
+                    const doc = await db.collection('sections').doc(currentLevel.id).get();
+                    
+                    if (doc.exists) {
+                        currentData = doc.data();
+                        updateBreadcrumb();
+                        updateContentArea();
+                    }
+                } 
+                // إذا كان المستوى الحالي هو فولدر (folder)
+                else if (currentLevel.type === 'folder') {
+                    // الفولدرات يتم تخزينها داخل القسم الحالي، لذا نحتاج للوصول إليها من خلال المسار
+                    let parentData = null;
+                    
+                    if (currentPath.length === 1) {
+                        // إذا كان الفولدر مباشرة تحت قسم
+                        const parentDoc = await db.collection('sections').doc(currentPath[0].id).get();
+                        if (parentDoc.exists) {
+                            parentData = parentDoc.data();
+                        }
+                    } else {
+                        // إذا كان الفولدر داخل فولدر آخر (مستويات متعددة)
+                        // في هذا الإصدار البسيط، سنتعامل مع الفولدرات الموجودة مباشرة تحت الأقسام فقط
+                        const parentDoc = await db.collection('sections').doc(currentPath[0].id).get();
+                        if (parentDoc.exists) {
+                            parentData = parentDoc.data();
+                        }
+                    }
+                    
+                    if (parentData && parentData.items) {
+                        // البحث عن الفولدر الحالي في العناصر
+                        const currentFolder = parentData.items.find(item => item.id === currentLevel.id);
+                        if (currentFolder) {
+                            currentData = currentFolder;
+                            updateBreadcrumb();
+                            updateContentArea();
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('Error loading path:', error);
@@ -336,16 +370,16 @@
                 }
 
                 if (item.type === 'folder') {
-                    // Open folder - EVEN IF EMPTY
+                    // فتح الفولدر - التصحيح هنا
                     currentPath.push({ type: 'folder', id: itemId, name: itemName });
-                    loadCurrentPath();
+                    await loadCurrentPath();
                 } else if (item.type === 'text' || item.type === 'youtube') {
                     displayContent(item);
                 }
             } else {
-                // Opening a section
+                // فتح قسم
                 currentPath.push({ type: itemType, id: itemId, name: itemName });
-                loadCurrentPath();
+                await loadCurrentPath();
             }
         }
 
