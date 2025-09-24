@@ -4,373 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام المواد الدراسية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            padding: 20px;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        /* Breadcrumb */
-        .breadcrumb {
-            background: rgba(255,255,255,0.9);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .breadcrumb-item {
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
-
-        .breadcrumb-item:hover {
-            background: #e9ecef;
-        }
-
-        .breadcrumb-separator {
-            color: #666;
-        }
-
-        /* Main Content Area */
-        .content-area {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            min-height: 500px;
-        }
-
-        /* Sections Grid */
-        .sections-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .section-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            min-height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .section-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        }
-
-        .section-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        /* Items Grid */
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .item-card {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            min-height: 120px;
-        }
-
-        .item-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .item-card.folder {
-            border-left: 5px solid #ff9800;
-        }
-
-        .item-card.content {
-            border-left: 5px solid #4CAF50;
-        }
-
-        .item-card.private {
-            background: #fff3cd;
-            border-color: #ffeaa7;
-        }
-
-        .item-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-
-        .item-type {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .item-actions {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            display: flex;
-            gap: 5px;
-        }
-
-        .item-count {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.1);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #f44336;
-            color: white;
-        }
-
-        .btn-small {
-            padding: 4px 8px;
-            font-size: 0.8rem;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: flex-end;
-        }
-
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
-
-        .empty-state h3 {
-            margin-bottom: 10px;
-            color: #999;
-        }
-
-        /* Content Display */
-        .content-display {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
         .youtube-container {
             position: relative;
             width: 100%;
             height: 0;
             padding-bottom: 56.25%;
-            margin-top: 15px;
         }
-
         .youtube-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 8px;
-        }
-
-        .password-prompt {
-            background: #fff3cd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            text-align: center;
+            border-radius: 0.5rem;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>نظام المواد الدراسية</h1>
-            <p>إدارة المحتوى التعليمي للثانوية العامة</p>
+<body class="bg-gray-900 min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2">نظام المواد الدراسية</h1>
+            <p class="text-gray-300">إدارة المحتوى التعليمي للثانوية العامة</p>
         </div>
 
-        <div class="breadcrumb" id="breadcrumb">
+        <!-- Breadcrumb -->
+        <div class="bg-gray-800 p-4 rounded-lg mb-6 flex items-center flex-wrap gap-2" id="breadcrumb">
             <!-- Breadcrumb will be generated here -->
         </div>
 
-        <div class="content-area" id="contentArea">
+        <!-- Content Area -->
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6 min-h-[500px]" id="contentArea">
             <!-- Content will be loaded here -->
         </div>
 
-        <div class="action-buttons" id="actionButtons" style="display: none;">
-            <button class="btn btn-secondary" onclick="cancelChanges()">إلغاء التعديلات</button>
-            <button class="btn btn-primary" onclick="saveAllChanges()">حفظ كل التحديثات</button>
+        <!-- Action Buttons -->
+        <div class="flex gap-3 justify-end mt-6" id="actionButtons" style="display: none;">
+            <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition duration-200" onclick="cancelChanges()">
+                إلغاء التعديلات
+            </button>
+            <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition duration-200" onclick="saveAllChanges()">
+                حفظ كل التحديثات
+            </button>
         </div>
     </div>
 
     <!-- Add Item Modal -->
-    <div id="addItemModal" class="modal">
-        <div class="modal-content">
-            <h3 id="modalTitle">إضافة جديد</h3>
-            <div class="form-group">
-                <label for="itemName">الاسم:</label>
-                <input type="text" id="itemName" placeholder="أدخل الاسم">
+    <div id="addItemModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md mx-4">
+            <h3 class="text-xl font-bold mb-4" id="modalTitle">إضافة جديد</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">الاسم:</label>
+                    <input type="text" id="itemName" placeholder="أدخل الاسم" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">النوع:</label>
+                    <select id="itemType" onchange="toggleContentFields()" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                        <option value="folder">فولدر</option>
+                        <option value="text">محتوى نصي</option>
+                        <option value="youtube">فيديو يوتيوب</option>
+                    </select>
+                </div>
+                <div id="contentField" class="hidden">
+                    <label class="block text-sm font-medium mb-2">المحتوى/الرابط:</label>
+                    <textarea id="itemContent" placeholder="أدخل المحتوى النصي أو رابط اليوتيوب" rows="4" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"></textarea>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="isPrivate" onchange="toggleContentFields()" class="ml-2">
+                    <label>محتوى/فولدر سري</label>
+                </div>
+                <div id="passwordField" class="hidden">
+                    <label class="block text-sm font-medium mb-2">كلمة المرور:</label>
+                    <input type="password" id="itemPassword" placeholder="أدخل كلمة المرور" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="itemType">النوع:</label>
-                <select id="itemType" onchange="toggleContentFields()">
-                    <option value="folder">فولدر</option>
-                    <option value="text">محتوى نصي</option>
-                    <option value="youtube">فيديو يوتيوب</option>
-                </select>
-            </div>
-            <div class="form-group" id="contentField" style="display: none;">
-                <label for="itemContent">المحتوى/الرابط:</label>
-                <textarea id="itemContent" placeholder="أدخل المحتوى النصي أو رابط اليوتيوب" rows="4"></textarea>
-            </div>
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" id="isPrivate">
-                    محتوى/فولدر سري
-                </label>
-            </div>
-            <div class="form-group" id="passwordField" style="display: none;">
-                <label for="itemPassword">كلمة المرور:</label>
-                <input type="password" id="itemPassword" placeholder="أدخل كلمة المرور">
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" onclick="addItem()">إضافة</button>
-                <button class="btn btn-secondary" onclick="closeModal('addItemModal')">إلغاء</button>
+            <div class="flex gap-3 justify-end mt-6">
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="addItem()">
+                    إضافة
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="closeModal('addItemModal')">
+                    إلغاء
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Password Modal -->
-    <div id="passwordModal" class="modal">
-        <div class="modal-content">
-            <h3>إدخال كلمة المرور</h3>
-            <div class="form-group">
-                <label for="enteredPassword">كلمة المرور:</label>
-                <input type="password" id="enteredPassword" placeholder="أدخل كلمة المرور">
+    <div id="passwordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md mx-4">
+            <h3 class="text-xl font-bold mb-4">إدخال كلمة المرور</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">كلمة المرور:</label>
+                    <input type="password" id="enteredPassword" placeholder="أدخل كلمة المرور" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                </div>
             </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" onclick="checkPassword()">فتح</button>
-                <button class="btn btn-secondary" onclick="closeModal('passwordModal')">إلغاء</button>
+            <div class="flex gap-3 justify-end mt-6">
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="checkPassword()">
+                    فتح
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="closeModal('passwordModal')">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Section Modal -->
+    <div id="addSectionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md mx-4">
+            <h3 class="text-xl font-bold mb-4">إضافة قسم جديد</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">اسم القسم:</label>
+                    <input type="text" id="sectionName" placeholder="أدخل اسم القسم" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">معرف القسم (إنجليزي):</label>
+                    <input type="text" id="sectionId" placeholder="أدخل معرف القسم" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                </div>
+            </div>
+            <div class="flex gap-3 justify-end mt-6">
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="addNewSection()">
+                    إضافة
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="closeModal('addSectionModal')">
+                    إلغاء
+                </button>
             </div>
         </div>
     </div>
@@ -447,11 +212,11 @@
         // Update breadcrumb
         function updateBreadcrumb() {
             const breadcrumb = document.getElementById('breadcrumb');
-            let html = '<span class="breadcrumb-item" onclick="loadSections()">الرئيسية</span>';
+            let html = '<span class="cursor-pointer px-3 py-1 bg-gray-700 rounded-lg hover:bg-gray-600 transition duration-200" onclick="loadSections()">الرئيسية</span>';
 
             currentPath.forEach((item, index) => {
-                html += `<span class="breadcrumb-separator">›</span>`;
-                html += `<span class="breadcrumb-item" onclick="navigateTo(${index})">${item.name}</span>`;
+                html += `<span class="text-gray-400">›</span>`;
+                html += `<span class="cursor-pointer px-3 py-1 bg-gray-700 rounded-lg hover:bg-gray-600 transition duration-200" onclick="navigateTo(${index})">${item.name}</span>`;
             });
 
             breadcrumb.innerHTML = html;
@@ -492,14 +257,23 @@
             if (currentPath.length === 0) {
                 // Root level - show sections
                 contentArea.innerHTML = `
-                    <h2>الأقسام الرئيسية</h2>
-                    <div class="sections-grid">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">الأقسام الرئيسية</h2>
+                        <div class="flex gap-3">
+                            <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="openAddSectionModal()">
+                                + إضافة قسم جديد
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         ${currentData.items.map(section => `
-                            <div class="section-card" onclick="openItem('${section.id}', '${section.name}', 'section')">
+                            <div class="bg-gradient-to-br from-purple-600 to-blue-600 text-white p-8 rounded-xl text-center cursor-pointer transform hover:scale-105 transition duration-300 min-h-[150px] flex items-center justify-center relative" 
+                                 onclick="openItem('${section.id}', '${section.name}', 'section')">
                                 <div>
-                                    <h3>${section.name}</h3>
-                                    <p>${section.items?.length || 0} عنصر</p>
+                                    <h3 class="text-xl font-bold mb-2">${section.name}</h3>
+                                    <p class="text-blue-200">${section.items?.length || 0} عنصر</p>
                                 </div>
+                                <button class="absolute top-2 left-2 bg-red-600 hover:bg-red-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); deleteSection('${section.id}')">🗑️</button>
                             </div>
                         `).join('')}
                     </div>
@@ -508,39 +282,40 @@
             } else {
                 // Show items in current folder/section
                 const items = currentData.items || [];
-                const currentLevel = currentPath[currentPath.length - 1];
                 
                 contentArea.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2>${currentData.name}</h2>
-                        <button class="btn btn-primary" onclick="openAddModal()">+ إضافة جديد</button>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">${currentData.name}</h2>
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="openAddModal()">
+                            + إضافة جديد
+                        </button>
                     </div>
                     
                     ${items.length > 0 ? `
-                        <div class="items-grid">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             ${items.map((item, index) => `
-                                <div class="item-card ${item.type} ${item.isPrivate ? 'private' : ''}" 
+                                <div class="bg-gray-700 border-2 border-gray-600 rounded-xl p-4 cursor-pointer transition duration-200 hover:border-blue-500 hover:transform hover:scale-105 relative min-h-[120px] ${item.isPrivate ? 'bg-yellow-900 border-yellow-600' : ''}" 
                                      onclick="openItem('${item.id}', '${item.name}', '${item.type}', ${index})">
-                                    <div class="item-actions">
-                                        <button class="btn btn-danger btn-small" onclick="event.stopPropagation(); deleteItem(${index})">🗑️</button>
-                                        <button class="btn btn-secondary btn-small" onclick="event.stopPropagation(); editItem(${index})">✏️</button>
+                                    <div class="absolute top-2 left-2 flex gap-1">
+                                        <button class="bg-red-600 hover:bg-red-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); deleteItem(${index})">🗑️</button>
+                                        <button class="bg-gray-600 hover:bg-gray-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); editItem(${index})">✏️</button>
                                     </div>
-                                    <div class="item-title">${item.name}</div>
-                                    <div class="item-type">
+                                    <div class="font-bold mb-2">${item.name}</div>
+                                    <div class="text-gray-300 text-sm">
                                         ${item.type === 'folder' ? '📁 فولدر' : 
                                           item.type === 'text' ? '📄 محتوى نصي' : 
                                           '🎥 فيديو يوتيوب'}
                                         ${item.isPrivate ? ' 🔒' : ''}
                                     </div>
                                     ${item.type === 'folder' ? `
-                                        <div class="item-count">${item.items?.length || 0} عنصر</div>
+                                        <div class="absolute bottom-2 left-2 bg-gray-800 px-2 py-1 rounded text-xs">${item.items?.length || 0} عنصر</div>
                                     ` : ''}
                                 </div>
                             `).join('')}
                         </div>
                     ` : `
-                        <div class="empty-state">
-                            <h3>لا يوجد محتوى</h3>
+                        <div class="text-center py-16 text-gray-400">
+                            <h3 class="text-xl mb-2">لا يوجد محتوى</h3>
                             <p>انقر على "إضافة جديد" لبدء إضافة المحتوى</p>
                         </div>
                     `}
@@ -556,33 +331,14 @@
                 
                 if (item.isPrivate && !item.unlocked) {
                     passwordProtectedItem = { index, item };
-                    document.getElementById('passwordModal').style.display = 'flex';
+                    showModal('passwordModal');
                     return;
                 }
 
                 if (item.type === 'folder') {
-                    // Open folder - check if it exists in Firestore
-                    try {
-                        const folderDoc = await db.collection('sections').doc(itemId).get();
-                        if (folderDoc.exists) {
-                            currentPath.push({ type: 'folder', id: itemId, name: itemName });
-                            loadCurrentPath();
-                        } else {
-                            // Create folder document if it doesn't exist
-                            await db.collection('sections').doc(itemId).set({
-                                id: itemId,
-                                name: itemName,
-                                type: 'folder',
-                                items: [],
-                                isPrivate: item.isPrivate || false,
-                                password: item.password || null
-                            });
-                            currentPath.push({ type: 'folder', id: itemId, name: itemName });
-                            loadCurrentPath();
-                        }
-                    } catch (error) {
-                        console.error('Error opening folder:', error);
-                    }
+                    // Open folder - EVEN IF EMPTY
+                    currentPath.push({ type: 'folder', id: itemId, name: itemName });
+                    loadCurrentPath();
                 } else if (item.type === 'text' || item.type === 'youtube') {
                     displayContent(item);
                 }
@@ -596,37 +352,76 @@
         // Display content
         function displayContent(item) {
             const contentArea = document.getElementById('contentArea');
-            contentArea.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2>${item.name}</h2>
-                    <button class="btn btn-secondary" onclick="loadCurrentPath()">← رجوع</button>
-                </div>
-                
-                <div class="content-display">
-                    <h3>${item.name}</h3>
-                    ${item.type === 'text' ? `
-                        <div style="white-space: pre-wrap; margin-top: 15px; line-height: 1.6; background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
-                            ${item.content}
-                        </div>
-                    ` : item.type === 'youtube' ? `
+            
+            let contentHTML = '';
+            if (item.type === 'text') {
+                contentHTML = `
+                    <div class="bg-white text-gray-900 p-6 rounded-lg whitespace-pre-wrap leading-relaxed border border-gray-300">
+                        ${item.content}
+                    </div>
+                `;
+            } else if (item.type === 'youtube') {
+                const youtubeId = extractYouTubeId(item.content);
+                if (youtubeId) {
+                    contentHTML = `
                         <div class="youtube-container">
-                            <iframe src="https://www.youtube.com/embed/${extractYouTubeId(item.content)}" 
-                                    frameborder="0" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube.com/embed/${youtubeId}" 
+                                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe>
                         </div>
-                        <div style="margin-top: 15px;">
-                            <a href="${item.content}" target="_blank" style="color: #667eea; text-decoration: none;">
+                        <div class="mt-4">
+                            <a href="${item.content}" target="_blank" class="text-blue-400 hover:text-blue-300 transition duration-200">
                                 🔗 فتح الرابط في نافذة جديدة
                             </a>
                         </div>
-                    ` : ''}
+                    `;
+                } else {
+                    contentHTML = `
+                        <div class="bg-red-900 text-white p-4 rounded-lg">
+                            <p>❌ رابط اليوتيوب غير صحيح</p>
+                            <p class="text-sm mt-2">الرابط: ${item.content}</p>
+                        </div>
+                    `;
+                }
+            }
+
+            contentArea.innerHTML = `
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">${item.name}</h2>
+                    <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="loadCurrentPath()">
+                        ← رجوع
+                    </button>
+                </div>
+                
+                <div class="content-display">
+                    <h3 class="text-xl font-bold mb-4">${item.name}</h3>
+                    ${contentHTML}
                 </div>
             `;
         }
 
-        // Extract YouTube ID from URL
+        // Extract YouTube ID from URL - FIXED VERSION
         function extractYouTubeId(url) {
-            const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-            return match ? match[1] : '';
+            if (!url) return '';
+            
+            // Handle various YouTube URL formats
+            const patterns = [
+                /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/,
+                /youtube\.com\/embed\/([^"&?\/\s]{11})/,
+                /youtube\.com\/watch\?v=([^"&?\/\s]{11})/,
+                /youtu\.be\/([^"&?\/\s]{11})/
+            ];
+            
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match && match[1]) {
+                    return match[1];
+                }
+            }
+            
+            // If no pattern matches, try to extract 11-character video ID directly
+            const directMatch = url.match(/([0-9A-Za-z_-]{11})/);
+            return directMatch ? directMatch[1] : '';
         }
 
         // Open add modal
@@ -638,7 +433,14 @@
             document.getElementById('isPrivate').checked = false;
             document.getElementById('itemPassword').value = '';
             toggleContentFields();
-            document.getElementById('addItemModal').style.display = 'flex';
+            showModal('addItemModal');
+        }
+
+        // Open add section modal
+        function openAddSectionModal() {
+            document.getElementById('sectionName').value = '';
+            document.getElementById('sectionId').value = '';
+            showModal('addSectionModal');
         }
 
         // Toggle content fields based on type
@@ -648,8 +450,8 @@
             const passwordField = document.getElementById('passwordField');
             const isPrivate = document.getElementById('isPrivate').checked;
 
-            contentField.style.display = type !== 'folder' ? 'block' : 'none';
-            passwordField.style.display = isPrivate ? 'block' : 'none';
+            contentField.classList.toggle('hidden', type === 'folder');
+            passwordField.classList.toggle('hidden', !isPrivate);
         }
 
         // Add new item
@@ -676,13 +478,49 @@
             if (!currentData.items) currentData.items = [];
             currentData.items.push(newItem);
             
-            // Mark as pending change
-            const path = currentPath.map(p => p.id).join('/');
-            if (!pendingChanges[path]) pendingChanges[path] = [];
-            pendingChanges[path].push({ type: 'add', item: newItem });
+            // Mark as pending change - FIXED: Save in correct location
+            const currentLocationId = currentPath.length > 0 ? currentPath[currentPath.length - 1].id : 'root';
+            if (!pendingChanges[currentLocationId]) pendingChanges[currentLocationId] = [];
+            pendingChanges[currentLocationId].push({ type: 'add', item: newItem });
 
             updateContentArea();
             closeModal('addItemModal');
+        }
+
+        // Add new section
+        async function addNewSection() {
+            const name = document.getElementById('sectionName').value.trim();
+            const id = document.getElementById('sectionId').value.trim();
+
+            if (!name || !id) {
+                alert('يرجى إدخال اسم القسم ومعرفه');
+                return;
+            }
+
+            try {
+                // Check if section with this ID already exists
+                const existingDoc = await db.collection('sections').doc(id).get();
+                if (existingDoc.exists) {
+                    alert('معرف القسم موجود مسبقاً، يرجى اختيار معرف آخر');
+                    return;
+                }
+
+                // Create new section
+                const newSection = {
+                    id: id,
+                    name: name,
+                    type: 'section',
+                    items: [],
+                    createdAt: new Date().toISOString()
+                };
+
+                await db.collection('sections').doc(id).set(newSection);
+                closeModal('addSectionModal');
+                loadSections(); // Reload sections to show the new one
+            } catch (error) {
+                console.error('Error adding section:', error);
+                alert('حدث خطأ أثناء إضافة القسم');
+            }
         }
 
         // Delete item
@@ -690,12 +528,25 @@
             if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
                 const deletedItem = currentData.items.splice(index, 1)[0];
                 
-                // Mark as pending change
-                const path = currentPath.map(p => p.id).join('/');
-                if (!pendingChanges[path]) pendingChanges[path] = [];
-                pendingChanges[path].push({ type: 'delete', itemId: deletedItem.id });
+                // Mark as pending change - FIXED: Save in correct location
+                const currentLocationId = currentPath.length > 0 ? currentPath[currentPath.length - 1].id : 'root';
+                if (!pendingChanges[currentLocationId]) pendingChanges[currentLocationId] = [];
+                pendingChanges[currentLocationId].push({ type: 'delete', itemId: deletedItem.id });
 
                 updateContentArea();
+            }
+        }
+
+        // Delete section
+        async function deleteSection(sectionId) {
+            if (confirm('هل أنت متأكد من حذف هذا القسم؟ سيتم حذف جميع المحتويات داخله.')) {
+                try {
+                    await db.collection('sections').doc(sectionId).delete();
+                    loadSections(); // Reload sections to reflect the deletion
+                } catch (error) {
+                    console.error('Error deleting section:', error);
+                    alert('حدث خطأ أثناء حذف القسم');
+                }
             }
         }
 
@@ -710,9 +561,8 @@
             document.getElementById('itemPassword').value = item.password || '';
             toggleContentFields();
 
-            // Store editing index
             document.getElementById('addItemModal').dataset.editingIndex = index;
-            document.getElementById('addItemModal').style.display = 'flex';
+            showModal('addItemModal');
         }
 
         // Check password
@@ -727,9 +577,16 @@
             }
         }
 
+        // Show modal
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.getElementById(modalId).classList.add('flex');
+        }
+
         // Close modal
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+            document.getElementById(modalId).classList.add('hidden');
+            document.getElementById(modalId).classList.remove('flex');
         }
 
         // Generate unique ID
@@ -737,22 +594,19 @@
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
         }
 
-        // Save all changes to Firebase
+        // Save all changes to Firebase - FIXED VERSION
         async function saveAllChanges() {
             try {
-                for (const [path, changes] of Object.entries(pendingChanges)) {
-                    const pathParts = path.split('/');
-                    const docId = pathParts[pathParts.length - 1];
-                    
-                    const docRef = db.collection('sections').doc(docId);
+                for (const [locationId, changes] of Object.entries(pendingChanges)) {
+                    const docRef = db.collection('sections').doc(locationId);
                     const doc = await docRef.get();
                     
                     if (doc.exists) {
                         let data = doc.data();
+                        if (!data.items) data.items = [];
                         
                         for (const change of changes) {
                             if (change.type === 'add') {
-                                if (!data.items) data.items = [];
                                 data.items.push(change.item);
                             } else if (change.type === 'delete') {
                                 data.items = data.items.filter(item => item.id !== change.itemId);
