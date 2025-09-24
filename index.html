@@ -176,6 +176,7 @@
                 });
 
                 if (sections.length === 0) {
+                    await createDefaultSharedSubjects();
                     await createDefaultSections();
                     loadSections();
                     return;
@@ -199,11 +200,6 @@
                     sharedSubjects[doc.id] = doc.data();
                 });
                 
-                // إذا لم تكن هناك مواد مشتركة، قم بإنشائها
-                if (Object.keys(sharedSubjects).length === 0) {
-                    await createDefaultSharedSubjects();
-                    await loadSharedSubjects();
-                }
             } catch (error) {
                 console.error('Error loading shared subjects:', error);
             }
@@ -624,36 +620,22 @@
                 createdAt: new Date().toISOString()
             };
 
-            // إذا كنا نضيف إلى مادة مشتركة
-            if (currentData.isShared) {
-                try {
-                    // تحديث المادة المشتركة في Firebase
-                    const subjectRef = db.collection('sharedSubjects').doc(currentData.id);
-                    await subjectRef.update({
-                        items: firebase.firestore.FieldValue.arrayUnion(newItem)
-                    });
-                    
-                    // إعادة تحميل البيانات
-                    await loadSharedSubjects();
-                    await loadCurrentPath();
-                    alert('تم إضافة العنصر بنجاح!');
-                } catch (error) {
-                    console.error('Error adding item to shared subject:', error);
-                    alert('حدث خطأ أثناء إضافة العنصر');
-                }
+            // إضافة إلى الفولدر الحالي
+            if (!currentData.items) currentData.items = [];
+            currentData.items.push(newItem);
+            
+            const currentLocationKey = currentPath.map(item => item.id).join('/');
+            if (!pendingChanges[currentLocationKey]) {
+                pendingChanges[currentLocationKey] = {
+                    path: currentPath,
+                    items: [...currentData.items]
+                };
             } else {
-                // إضافة إلى فولدر عادي
-                if (!currentData.items) currentData.items = [];
-                currentData.items.push(newItem);
-                
-                // Mark as pending change
-                const currentLocationId = currentPath.length > 0 ? currentPath[currentPath.length - 1].id : 'root';
-                if (!pendingChanges[currentLocationId]) pendingChanges[currentLocationId] = [];
-                pendingChanges[currentLocationId].push({ type: 'add', item: newItem });
-
-                updateContentArea();
-                alert('تم إضافة العنصر بنجاح! سيتم حفظه عند الضغط على "حفظ كل التحديثات"');
+                pendingChanges[currentLocationKey].items = [...currentData.items];
             }
+
+            updateContentArea();
+            alert('تم إضافة العنصر بنجاح! سيتم حفظه عند الضغط على "حفظ كل التحديثات"');
             
             closeModal('addItemModal');
         }
@@ -698,35 +680,20 @@
         // Delete item
         async function deleteItem(index) {
             if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
-                // إذا كنا نحذف من مادة مشتركة
-                if (currentData.isShared) {
-                    try {
-                        const itemToDelete = currentData.items[index];
-                        const subjectRef = db.collection('sharedSubjects').doc(currentData.id);
-                        await subjectRef.update({
-                            items: firebase.firestore.FieldValue.arrayRemove(itemToDelete)
-                        });
-                        
-                        // إعادة تحميل البيانات
-                        await loadSharedSubjects();
-                        await loadCurrentPath();
-                        alert('تم حذف العنصر بنجاح!');
-                    } catch (error) {
-                        console.error('Error deleting item from shared subject:', error);
-                        alert('حدث خطأ أثناء حذف العنصر');
-                    }
+                const deletedItem = currentData.items.splice(index, 1)[0];
+                
+                const currentLocationKey = currentPath.map(item => item.id).join('/');
+                if (!pendingChanges[currentLocationKey]) {
+                    pendingChanges[currentLocationKey] = {
+                        path: currentPath,
+                        items: [...currentData.items]
+                    };
                 } else {
-                    // حذف من فولدر عادي
-                    const deletedItem = currentData.items.splice(index, 1)[0];
-                    
-                    // Mark as pending change
-                    const currentLocationId = currentPath.length > 0 ? currentPath[currentPath.length - 1].id : 'root';
-                    if (!pendingChanges[currentLocationId]) pendingChanges[currentLocationId] = [];
-                    pendingChanges[currentLocationId].push({ type: 'delete', itemId: deletedItem.id });
-
-                    updateContentArea();
-                    alert('تم حذف العنصر بنجاح! سيتم حفظ التغيير عند الضغط على "حفظ كل التحديثات"');
+                    pendingChanges[currentLocationKey].items = [...currentData.items];
                 }
+
+                updateContentArea();
+                alert('تم حذف العنصر بنجاح! سيتم حفظ التغيير عند الضغط على "حفظ كل التحديثات"');
             }
         }
 
@@ -791,62 +758,57 @@
         // Save all changes to Firebase - FIXED VERSION
         async function saveAllChanges() {
             try {
-                for (const [locationId, changes] of Object.entries(pendingChanges)) {
-                    if (locationId === 'root') {
-                        // Handle root level changes (sections)
-                        for (const change of changes) {
-                            if (change.type === 'add') {
-                                // Add new section
-                                await db.collection('sections').doc(change.item.id).set(change.item);
-                            } else if (change.type === 'delete') {
-                                // Delete section
-                                await db.collection('sections').doc(change.itemId).delete();
-                            }
-                        }
+                for (const changeKey in pendingChanges) {
+                    const change = pendingChanges[changeKey];
+                    const path = change.path;
+                    const itemsToSave = change.items;
+                    
+                    if (path.length === 0) {
+                        // Root level sections
+                        await db.collection('sections').doc('placeholder').set({ items: itemsToSave });
                     } else {
-                        // Handle folder level changes
-                        // Find the parent document (section or shared subject)
-                        let parentDocRef = null;
-                        let parentCollection = 'sections';
+                        // Nested folder or shared subject
+                        const rootItem = path[0];
+                        let docRef;
                         
-                        // Determine if this is a section or shared subject
-                        if (currentPath.length > 0 && currentPath[0].type === 'section') {
-                            parentDocRef = db.collection('sections').doc(locationId);
-                        } else if (currentPath.length > 1 && currentPath[1].type === 'shared') {
-                            parentCollection = 'sharedSubjects';
-                            parentDocRef = db.collection('sharedSubjects').doc(locationId);
+                        if (rootItem.type === 'section') {
+                            docRef = db.collection('sections').doc(rootItem.id);
+                        } else if (rootItem.type === 'shared') {
+                            docRef = db.collection('sharedSubjects').doc(rootItem.sharedId);
+                        } else {
+                            continue;
                         }
-                        
-                        if (parentDocRef) {
-                            // Get current data
-                            const parentDoc = await parentDocRef.get();
-                            if (parentDoc.exists) {
-                                const parentData = parentDoc.data();
-                                
-                                // Apply changes
-                                for (const change of changes) {
-                                    if (change.type === 'add') {
-                                        if (!parentData.items) parentData.items = [];
-                                        parentData.items.push(change.item);
-                                    } else if (change.type === 'delete') {
-                                        parentData.items = parentData.items.filter(item => item.id !== change.itemId);
-                                    }
+
+                        const doc = await docRef.get();
+                        if (doc.exists) {
+                            let currentItems = doc.data().items;
+                            let targetItems = currentItems;
+                            
+                            // Traverse down the path to find the correct nested folder
+                            for (let i = 1; i < path.length; i++) {
+                                const level = path[i];
+                                const targetFolder = targetItems.find(item => item.id === level.id);
+                                if (!targetFolder) {
+                                    console.error('Target folder not found in path.');
+                                    break;
                                 }
-                                
-                                // Save updated data
-                                await parentDocRef.update({ items: parentData.items });
+                                targetItems = targetFolder.items;
                             }
+                            
+                            // Update the items of the target folder
+                            if (targetItems) {
+                                targetItems = itemsToSave;
+                            }
+
+                            // Save the whole document back
+                            await docRef.update({ items: currentItems });
                         }
                     }
                 }
                 
-                // Clear pending changes
                 pendingChanges = {};
                 document.getElementById('actionButtons').style.display = 'none';
-                
-                // Reload current data
                 await loadCurrentPath();
-                
                 alert('تم حفظ التعديلات بنجاح!');
             } catch (error) {
                 console.error('Error saving changes:', error);
