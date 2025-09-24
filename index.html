@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظمواد الدراسية</title>
+    <title>نظام المواد الدراسية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -43,15 +43,6 @@
 
         <div class="bg-gray-800 rounded-lg shadow-xl p-6 min-h-[500px]" id="contentArea">
             </div>
-
-        <div class="flex gap-3 justify-end mt-6" id="actionButtons" style="display: none;">
-            <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition duration-200" onclick="cancelChanges()">
-                إلغاء التعديلات
-            </button>
-            <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition duration-200" onclick="saveAllChanges()">
-                حفظ كل التحديثات
-            </button>
-        </div>
     </div>
 
     <div id="addItemModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -72,7 +63,7 @@
                 </div>
                 <div id="contentField" class="hidden">
                     <label class="block text-sm font-medium mb-2">المحتوى/الرابط:</label>
-                    <textarea type="text" id="itemContent" placeholder="أدخل المحتوى النصي أو رابط اليوتيوب" rows="4" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"></textarea>
+                    <textarea id="itemContent" placeholder="أدخل المحتوى النصي أو رابط اليوتيوب" rows="4" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white"></textarea>
                 </div>
                 <div class="flex items-center">
                     <input type="checkbox" id="isPrivate" onchange="toggleContentFields()" class="ml-2">
@@ -157,9 +148,8 @@
         // Global variables
         let currentPath = [];
         let currentData = null;
-        let pendingChanges = {};
         let passwordProtectedItem = null;
-        let sharedSubjects = {}; // لتخزين المواد المشتركة
+        let sharedSubjects = {};
 
         // Initialize the app
         function initApp() {
@@ -181,17 +171,14 @@
                     loadSections();
                     return;
                 }
-
-                // تحميل المواد المشتركة
                 await loadSharedSubjects();
-                
                 displaySections(sections);
             } catch (error) {
                 console.error('Error loading sections:', error);
             }
         }
 
-        // تحميل المواد المشتركة
+        // Load shared subjects
         async function loadSharedSubjects() {
             try {
                 const snapshot = await db.collection('sharedSubjects').get();
@@ -200,12 +187,16 @@
                     sharedSubjects[doc.id] = doc.data();
                 });
                 
+                if (Object.keys(sharedSubjects).length === 0) {
+                    await createDefaultSharedSubjects();
+                    await loadSharedSubjects();
+                }
             } catch (error) {
                 console.error('Error loading shared subjects:', error);
             }
         }
 
-        // إنشاء المواد المشتركة الافتراضية
+        // Create default shared subjects
         async function createDefaultSharedSubjects() {
             const defaultSubjects = {
                 'arabic': { id: 'arabic', name: 'عربي', type: 'folder', items: [], isShared: true },
@@ -308,76 +299,50 @@
 
             try {
                 const currentLevel = currentPath[currentPath.length - 1];
-                let dataToLoad = null;
-
-                // Determine the data source based on the path
+                
                 if (currentLevel.type === 'section') {
                     const doc = await db.collection('sections').doc(currentLevel.id).get();
                     if (doc.exists) {
-                        dataToLoad = doc.data();
+                        currentData = doc.data();
                     }
-                } else {
-                    let parentData = null;
-                    if (currentPath[0].type === 'section') {
-                        const parentDoc = await db.collection('sections').doc(currentPath[0].id).get();
-                        if (parentDoc.exists) {
-                            parentData = parentDoc.data();
+                } 
+                else if (currentLevel.type === 'shared') {
+                    const subjectDoc = await db.collection('sharedSubjects').doc(currentLevel.sharedId).get();
+                    if (subjectDoc.exists) {
+                        currentData = subjectDoc.data();
+                    }
+                }
+                else if (currentLevel.type === 'folder') {
+                    const rootDocId = currentPath[0].id;
+                    const rootCollection = currentPath[0].type === 'section' ? 'sections' : 'sharedSubjects';
+                    const rootDoc = await db.collection(rootCollection).doc(rootDocId).get();
+                    
+                    if (rootDoc.exists) {
+                        let parentData = rootDoc.data();
+                        currentData = parentData;
+                        // Traverse down the path
+                        for (let i = 1; i < currentPath.length; i++) {
+                            const level = currentPath[i];
+                            const nextData = currentData.items.find(item => item.id === level.id);
+                            if (nextData) {
+                                currentData = nextData;
+                            } else {
+                                throw new Error('Nested folder not found');
+                            }
                         }
                     }
-
-                    if (parentData) {
-                        dataToLoad = findItemInPath(parentData.items, currentPath.slice(1));
-                    }
                 }
-
-                if (dataToLoad) {
-                    currentData = dataToLoad;
-                    updateBreadcrumb();
-                    updateContentArea();
-                } else {
-                    console.error('Data not found for the current path:', currentPath);
-                    alert('حدث خطأ: المحتوى المطلوب غير موجود.');
-                    currentPath.pop(); // Go back one level
-                    loadCurrentPath();
-                }
-
+                updateBreadcrumb();
+                updateContentArea();
             } catch (error) {
                 console.error('Error loading path:', error);
                 alert('حدث خطأ أثناء تحميل المحتوى');
             }
         }
 
-        // Helper function to find nested item in the path
-        function findItemInPath(items, path) {
-            let currentItems = items;
-            let foundItem = null;
-
-            for (let i = 0; i < path.length; i++) {
-                const level = path[i];
-                const item = currentItems.find(item => item.id === level.id || (item.sharedId && item.sharedId === level.id));
-
-                if (!item) {
-                    return null;
-                }
-
-                // If it's a shared item, get the real data from sharedSubjects
-                if (item.type === 'shared' && sharedSubjects[item.sharedId]) {
-                    foundItem = sharedSubjects[item.sharedId];
-                    if (i < path.length - 1) {
-                        currentItems = foundItem.items || [];
-                    }
-                } else {
-                    foundItem = item;
-                    currentItems = item.items || [];
-                }
-            }
-            return foundItem;
-        }
-
         // Update content area based on current data
         function updateContentArea() {
             const contentArea = document.getElementById('contentArea');
-            const actionButtons = document.getElementById('actionButtons');
 
             if (currentPath.length === 0) {
                 // Root level - show sections
@@ -403,21 +368,17 @@
                         `).join('')}
                     </div>
                 `;
-                actionButtons.style.display = 'none';
             } else {
-                // Show items in current folder/section
                 const items = currentData.items || [];
                 
                 contentArea.innerHTML = `
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold">${currentData.name}</h2>
-                        ${currentData.isShared ? `
-                            <span class="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">مادة مشتركة</span>
-                        ` : `
+                        <div class="flex gap-3">
                             <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="openAddModal()">
                                 + إضافة جديد
                             </button>
-                        `}
+                        </div>
                     </div>
                     
                     ${items.length > 0 ? `
@@ -426,10 +387,8 @@
                                 <div class="bg-gray-700 border-2 border-gray-600 rounded-xl p-4 cursor-pointer transition duration-200 hover:border-blue-500 hover:transform hover:scale-105 relative min-h-[120px] folder-item ${item.isPrivate ? 'bg-yellow-900 border-yellow-600' : ''}" 
                                      onclick="openItem('${item.id}', '${item.name}', '${item.type}', ${index})">
                                     <div class="absolute top-2 left-2 flex gap-1">
-                                        ${!currentData.isShared ? `
-                                            <button class="bg-red-600 hover:bg-red-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); deleteItem(${index})">🗑️</button>
-                                            <button class="bg-gray-600 hover:bg-gray-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); editItem(${index})">✏️</button>
-                                        ` : ''}
+                                        <button class="bg-red-600 hover:bg-red-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); deleteItem(${index})">🗑️</button>
+                                        <button class="bg-gray-600 hover:bg-gray-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); editItem(${index})">✏️</button>
                                     </div>
                                     <div class="font-bold mb-2">${item.name}</div>
                                     <div class="text-gray-300 text-sm">
@@ -448,21 +407,18 @@
                     ` : `
                         <div class="text-center py-16 text-gray-400">
                             <h3 class="text-xl mb-2">لا يوجد محتوى</h3>
-                            <p>${currentData.isShared ? 'هذه مادة مشتركة، سيتم إضافة المحتوى هنا' : 'انقر على "إضافة جديد" لبدء إضافة المحتوى'}</p>
+                            <p>انقر على "إضافة جديد" لبدء إضافة المحتوى</p>
                         </div>
                     `}
                 `;
-                actionButtons.style.display = Object.keys(pendingChanges).length > 0 ? 'flex' : 'none';
             }
         }
 
         // Open item (section, folder, or content)
         async function openItem(itemId, itemName, itemType, index = -1) {
-            console.log('Opening item:', {itemId, itemName, itemType, index});
             
             if (index !== -1) {
                 const item = currentData.items[index];
-                console.log('Item details:', item);
                 
                 if (item.isPrivate && !item.unlocked) {
                     passwordProtectedItem = { index, item };
@@ -471,22 +427,18 @@
                 }
 
                 if (item.type === 'folder' || item.type === 'shared') {
-                    // فتح الفولدر أو المادة المشتركة
                     currentPath.push({ 
                         type: item.type, 
                         id: item.id, 
                         name: item.name, 
                         sharedId: item.sharedId 
                     });
-                    console.log('New path:', currentPath);
                     await loadCurrentPath();
                 } else if (item.type === 'text' || item.type === 'youtube') {
                     displayContent(item);
                 }
             } else {
-                // فتح قسم
                 currentPath.push({ type: itemType, id: itemId, name: itemName });
-                console.log('New path (section):', currentPath);
                 await loadCurrentPath();
             }
         }
@@ -546,7 +498,6 @@
         function extractYouTubeId(url) {
             if (!url) return '';
             
-            // Handle various YouTube URL formats
             const patterns = [
                 /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/,
                 /youtube\.com\/embed\/([^"&?\/\s]{11})/,
@@ -561,7 +512,6 @@
                 }
             }
             
-            // If no pattern matches, try to extract 11-character video ID directly
             const directMatch = url.match(/([0-9A-Za-z_-]{11})/);
             return directMatch ? directMatch[1] : '';
         }
@@ -620,24 +570,15 @@
                 createdAt: new Date().toISOString()
             };
 
-            // إضافة إلى الفولدر الحالي
+            // Update the local data
             if (!currentData.items) currentData.items = [];
             currentData.items.push(newItem);
-            
-            const currentLocationKey = currentPath.map(item => item.id).join('/');
-            if (!pendingChanges[currentLocationKey]) {
-                pendingChanges[currentLocationKey] = {
-                    path: currentPath,
-                    items: [...currentData.items]
-                };
-            } else {
-                pendingChanges[currentLocationKey].items = [...currentData.items];
-            }
 
-            updateContentArea();
-            alert('تم إضافة العنصر بنجاح! سيتم حفظه عند الضغط على "حفظ كل التحديثات"');
+            // Save the changes
+            await saveChanges();
             
             closeModal('addItemModal');
+            alert('تم إضافة العنصر بنجاح!');
         }
 
         // Add new section
@@ -651,14 +592,12 @@
             }
 
             try {
-                // Check if section with this ID already exists
                 const existingDoc = await db.collection('sections').doc(id).get();
                 if (existingDoc.exists) {
                     alert('معرف القسم موجود مسبقاً، يرجى اختيار معرف آخر');
                     return;
                 }
 
-                // Create new section
                 const newSection = {
                     id: id,
                     name: name,
@@ -669,7 +608,7 @@
 
                 await db.collection('sections').doc(id).set(newSection);
                 closeModal('addSectionModal');
-                loadSections(); // Reload sections to show the new one
+                loadSections();
                 alert('تم إضافة القسم بنجاح!');
             } catch (error) {
                 console.error('Error adding section:', error);
@@ -680,20 +619,9 @@
         // Delete item
         async function deleteItem(index) {
             if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
-                const deletedItem = currentData.items.splice(index, 1)[0];
-                
-                const currentLocationKey = currentPath.map(item => item.id).join('/');
-                if (!pendingChanges[currentLocationKey]) {
-                    pendingChanges[currentLocationKey] = {
-                        path: currentPath,
-                        items: [...currentData.items]
-                    };
-                } else {
-                    pendingChanges[currentLocationKey].items = [...currentData.items];
-                }
-
-                updateContentArea();
-                alert('تم حذف العنصر بنجاح! سيتم حفظ التغيير عند الضغط على "حفظ كل التحديثات"');
+                currentData.items.splice(index, 1);
+                await saveChanges();
+                alert('تم حذف العنصر بنجاح!');
             }
         }
 
@@ -702,7 +630,7 @@
             if (confirm('هل أنت متأكد من حذف هذا القسم؟ سيتم حذف جميع المحتويات داخله.')) {
                 try {
                     await db.collection('sections').doc(sectionId).delete();
-                    loadSections(); // Reload sections to reflect the deletion
+                    loadSections();
                     alert('تم حذف القسم بنجاح!');
                 } catch (error) {
                     console.error('Error deleting section:', error);
@@ -755,73 +683,50 @@
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
         }
 
-        // Save all changes to Firebase - FIXED VERSION
-        async function saveAllChanges() {
+        // Save changes to Firebase
+        async function saveChanges() {
             try {
-                for (const changeKey in pendingChanges) {
-                    const change = pendingChanges[changeKey];
-                    const path = change.path;
-                    const itemsToSave = change.items;
-                    
-                    if (path.length === 0) {
-                        // Root level sections
-                        await db.collection('sections').doc('placeholder').set({ items: itemsToSave });
+                if (currentPath.length > 0) {
+                    const rootItem = currentPath[0];
+                    let docRef;
+
+                    if (rootItem.type === 'section') {
+                        docRef = db.collection('sections').doc(rootItem.id);
+                    } else if (rootItem.type === 'shared') {
+                        docRef = db.collection('sharedSubjects').doc(rootItem.sharedId);
                     } else {
-                        // Nested folder or shared subject
-                        const rootItem = path[0];
-                        let docRef;
+                        throw new Error('Invalid path root type');
+                    }
+
+                    const doc = await docRef.get();
+                    if (doc.exists) {
+                        const rootData = doc.data();
+                        let targetObject = rootData;
+
+                        // Traverse the path to find the correct items array to update
+                        for (let i = 1; i < currentPath.length; i++) {
+                            const level = currentPath[i];
+                            const nextObject = targetObject.items.find(item => item.id === level.id);
+                            if (nextObject) {
+                                targetObject = nextObject;
+                            } else {
+                                throw new Error('Nested folder not found for update');
+                            }
+                        }
+
+                        // Update the items array in the correct location
+                        targetObject.items = currentData.items;
+
+                        // Save the entire root document back
+                        await docRef.set(rootData);
                         
-                        if (rootItem.type === 'section') {
-                            docRef = db.collection('sections').doc(rootItem.id);
-                        } else if (rootItem.type === 'shared') {
-                            docRef = db.collection('sharedSubjects').doc(rootItem.sharedId);
-                        } else {
-                            continue;
-                        }
-
-                        const doc = await docRef.get();
-                        if (doc.exists) {
-                            let currentItems = doc.data().items;
-                            let targetItems = currentItems;
-                            
-                            // Traverse down the path to find the correct nested folder
-                            for (let i = 1; i < path.length; i++) {
-                                const level = path[i];
-                                const targetFolder = targetItems.find(item => item.id === level.id);
-                                if (!targetFolder) {
-                                    console.error('Target folder not found in path.');
-                                    break;
-                                }
-                                targetItems = targetFolder.items;
-                            }
-                            
-                            // Update the items of the target folder
-                            if (targetItems) {
-                                targetItems = itemsToSave;
-                            }
-
-                            // Save the whole document back
-                            await docRef.update({ items: currentItems });
-                        }
+                        // Reload the data to reflect changes
+                        await loadCurrentPath();
                     }
                 }
-                
-                pendingChanges = {};
-                document.getElementById('actionButtons').style.display = 'none';
-                await loadCurrentPath();
-                alert('تم حفظ التعديلات بنجاح!');
             } catch (error) {
                 console.error('Error saving changes:', error);
                 alert('حدث خطأ أثناء حفظ التعديلات');
-            }
-        }
-
-        // Cancel changes
-        function cancelChanges() {
-            if (confirm('هل تريد إلغاء جميع التعديلات غير المحفوظة؟')) {
-                pendingChanges = {};
-                document.getElementById('actionButtons').style.display = 'none';
-                loadCurrentPath();
             }
         }
 
@@ -830,4 +735,3 @@
     </script>
 </body>
 </html>
-
