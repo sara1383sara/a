@@ -22,6 +22,13 @@
             height: 100%;
             border-radius: 0.5rem;
         }
+        .folder-item {
+            transition: all 0.3s ease;
+        }
+        .folder-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body class="bg-gray-900 min-h-screen text-white">
@@ -161,6 +168,7 @@
         let currentData = null;
         let pendingChanges = {};
         let passwordProtectedItem = null;
+        let sharedSubjects = {}; // لتخزين المواد المشتركة
 
         // Initialize the app
         function initApp() {
@@ -182,18 +190,94 @@
                     return;
                 }
 
+                // تحميل المواد المشتركة
+                await loadSharedSubjects();
+                
                 displaySections(sections);
             } catch (error) {
                 console.error('Error loading sections:', error);
             }
         }
 
+        // تحميل المواد المشتركة
+        async function loadSharedSubjects() {
+            try {
+                const snapshot = await db.collection('sharedSubjects').get();
+                sharedSubjects = {};
+                snapshot.forEach(doc => {
+                    sharedSubjects[doc.id] = doc.data();
+                });
+                
+                // إذا لم تكن هناك مواد مشتركة، قم بإنشائها
+                if (Object.keys(sharedSubjects).length === 0) {
+                    await createDefaultSharedSubjects();
+                    await loadSharedSubjects();
+                }
+            } catch (error) {
+                console.error('Error loading shared subjects:', error);
+            }
+        }
+
+        // إنشاء المواد المشتركة الافتراضية
+        async function createDefaultSharedSubjects() {
+            const defaultSubjects = {
+                'arabic': { id: 'arabic', name: 'عربي', type: 'folder', items: [], isShared: true },
+                'english': { id: 'english', name: 'انجليزي', type: 'folder', items: [], isShared: true },
+                'physics': { id: 'physics', name: 'فيزياء', type: 'folder', items: [], isShared: true },
+                'chemistry': { id: 'chemistry', name: 'كيمياء', type: 'folder', items: [], isShared: true },
+                'math': { id: 'math', name: 'رياضة', type: 'folder', items: [], isShared: true },
+                'biology': { id: 'biology', name: 'أحياء', type: 'folder', items: [], isShared: true },
+                'geography': { id: 'geography', name: 'جغرافيا', type: 'folder', items: [], isShared: true },
+                'history': { id: 'history', name: 'تاريخ', type: 'folder', items: [], isShared: true },
+                'psychology': { id: 'psychology', name: 'علم نفس', type: 'folder', items: [], isShared: true },
+                'statistics': { id: 'statistics', name: 'إحصاء', type: 'folder', items: [], isShared: true }
+            };
+
+            for (const [subjectId, subject] of Object.entries(defaultSubjects)) {
+                await db.collection('sharedSubjects').doc(subjectId).set(subject);
+            }
+        }
+
         // Create default sections
         async function createDefaultSections() {
             const defaultSections = [
-                { id: 'math', name: 'علمي رياضة', type: 'section', items: [] },
-                { id: 'science', name: 'علمي علوم', type: 'section', items: [] },
-                { id: 'literary', name: 'أدبي', type: 'section', items: [] }
+                { 
+                    id: 'math', 
+                    name: 'علمي رياضة', 
+                    type: 'section', 
+                    items: [
+                        { id: 'arabic', name: 'عربي', type: 'shared', sharedId: 'arabic' },
+                        { id: 'english', name: 'انجليزي', type: 'shared', sharedId: 'english' },
+                        { id: 'physics', name: 'فيزياء', type: 'shared', sharedId: 'physics' },
+                        { id: 'chemistry', name: 'كيمياء', type: 'shared', sharedId: 'chemistry' },
+                        { id: 'math', name: 'رياضة', type: 'shared', sharedId: 'math' }
+                    ] 
+                },
+                { 
+                    id: 'science', 
+                    name: 'علمي علوم', 
+                    type: 'section', 
+                    items: [
+                        { id: 'arabic', name: 'عربي', type: 'shared', sharedId: 'arabic' },
+                        { id: 'english', name: 'انجليزي', type: 'shared', sharedId: 'english' },
+                        { id: 'physics', name: 'فيزياء', type: 'shared', sharedId: 'physics' },
+                        { id: 'chemistry', name: 'كيمياء', type: 'shared', sharedId: 'chemistry' },
+                        { id: 'biology', name: 'أحياء', type: 'shared', sharedId: 'biology' }
+                    ] 
+                },
+                { 
+                    id: 'literary', 
+                    name: 'أدبي', 
+                    type: 'section', 
+                    items: [
+                        { id: 'arabic', name: 'عربي', type: 'shared', sharedId: 'arabic' },
+                        { id: 'english', name: 'انجليزي', type: 'shared', sharedId: 'english' },
+                        { id: 'geography', name: 'جغرافيا', type: 'shared', sharedId: 'geography' },
+                        { id: 'history', name: 'تاريخ', type: 'shared', sharedId: 'history' },
+                        { id: 'psychology', name: 'علم نفس', type: 'shared', sharedId: 'psychology' },
+                        { id: 'statistics', name: 'إحصاء', type: 'shared', sharedId: 'statistics' }
+                    ] 
+                }
             ];
 
             for (const section of defaultSections) {
@@ -248,9 +332,20 @@
                         updateContentArea();
                     }
                 } 
-                // إذا كان المستوى الحالي هو فولدر (folder)
+                // إذا كان المستوى الحالي هو مادة مشتركة (shared)
+                else if (currentLevel.type === 'shared') {
+                    // تحميل المادة المشتركة من مجموعة sharedSubjects
+                    const subjectDoc = await db.collection('sharedSubjects').doc(currentLevel.sharedId).get();
+                    
+                    if (subjectDoc.exists) {
+                        currentData = subjectDoc.data();
+                        updateBreadcrumb();
+                        updateContentArea();
+                    }
+                }
+                // إذا كان المستوى الحالي هو فولدر عادي (folder)
                 else if (currentLevel.type === 'folder') {
-                    // الفولدرات يتم تخزينها داخل القسم الحالي، لذا نحتاج للوصول إليها من خلال المسار
+                    // الفولدرات يتم تخزينها داخل المادة المشتركة أو القسم
                     let parentData = null;
                     
                     if (currentPath.length === 1) {
@@ -260,9 +355,8 @@
                             parentData = parentDoc.data();
                         }
                     } else {
-                        // إذا كان الفولدر داخل فولدر آخر (مستويات متعددة)
-                        // في هذا الإصدار البسيط، سنتعامل مع الفولدرات الموجودة مباشرة تحت الأقسام فقط
-                        const parentDoc = await db.collection('sections').doc(currentPath[0].id).get();
+                        // إذا كان الفولدر داخل مادة مشتركة
+                        const parentDoc = await db.collection('sharedSubjects').doc(currentPath[1].sharedId).get();
                         if (parentDoc.exists) {
                             parentData = parentDoc.data();
                         }
@@ -280,6 +374,7 @@
                 }
             } catch (error) {
                 console.error('Error loading path:', error);
+                alert('حدث خطأ أثناء تحميل المحتوى');
             }
         }
 
@@ -301,11 +396,11 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         ${currentData.items.map(section => `
-                            <div class="bg-gradient-to-br from-purple-600 to-blue-600 text-white p-8 rounded-xl text-center cursor-pointer transform hover:scale-105 transition duration-300 min-h-[150px] flex items-center justify-center relative" 
+                            <div class="bg-gradient-to-br from-purple-600 to-blue-600 text-white p-8 rounded-xl text-center cursor-pointer transform hover:scale-105 transition duration-300 min-h-[150px] flex items-center justify-center relative folder-item" 
                                  onclick="openItem('${section.id}', '${section.name}', 'section')">
                                 <div>
                                     <h3 class="text-xl font-bold mb-2">${section.name}</h3>
-                                    <p class="text-blue-200">${section.items?.length || 0} عنصر</p>
+                                    <p class="text-blue-200">${section.items?.length || 0} مادة</p>
                                 </div>
                                 <button class="absolute top-2 left-2 bg-red-600 hover:bg-red-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); deleteSection('${section.id}')">🗑️</button>
                             </div>
@@ -320,28 +415,35 @@
                 contentArea.innerHTML = `
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold">${currentData.name}</h2>
-                        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="openAddModal()">
-                            + إضافة جديد
-                        </button>
+                        ${currentData.isShared ? `
+                            <span class="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">مادة مشتركة</span>
+                        ` : `
+                            <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-200" onclick="openAddModal()">
+                                + إضافة جديد
+                            </button>
+                        `}
                     </div>
                     
                     ${items.length > 0 ? `
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             ${items.map((item, index) => `
-                                <div class="bg-gray-700 border-2 border-gray-600 rounded-xl p-4 cursor-pointer transition duration-200 hover:border-blue-500 hover:transform hover:scale-105 relative min-h-[120px] ${item.isPrivate ? 'bg-yellow-900 border-yellow-600' : ''}" 
+                                <div class="bg-gray-700 border-2 border-gray-600 rounded-xl p-4 cursor-pointer transition duration-200 hover:border-blue-500 hover:transform hover:scale-105 relative min-h-[120px] folder-item ${item.isPrivate ? 'bg-yellow-900 border-yellow-600' : ''}" 
                                      onclick="openItem('${item.id}', '${item.name}', '${item.type}', ${index})">
                                     <div class="absolute top-2 left-2 flex gap-1">
-                                        <button class="bg-red-600 hover:bg-red-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); deleteItem(${index})">🗑️</button>
-                                        <button class="bg-gray-600 hover:bg-gray-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); editItem(${index})">✏️</button>
+                                        ${!currentData.isShared ? `
+                                            <button class="bg-red-600 hover:bg-red-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); deleteItem(${index})">🗑️</button>
+                                            <button class="bg-gray-600 hover:bg-gray-700 text-white p-1 rounded text-xs" onclick="event.stopPropagation(); editItem(${index})">✏️</button>
+                                        ` : ''}
                                     </div>
                                     <div class="font-bold mb-2">${item.name}</div>
                                     <div class="text-gray-300 text-sm">
                                         ${item.type === 'folder' ? '📁 فولدر' : 
                                           item.type === 'text' ? '📄 محتوى نصي' : 
+                                          item.type === 'shared' ? '📚 مادة مشتركة' :
                                           '🎥 فيديو يوتيوب'}
                                         ${item.isPrivate ? ' 🔒' : ''}
                                     </div>
-                                    ${item.type === 'folder' ? `
+                                    ${item.type === 'folder' || item.type === 'shared' ? `
                                         <div class="absolute bottom-2 left-2 bg-gray-800 px-2 py-1 rounded text-xs">${item.items?.length || 0} عنصر</div>
                                     ` : ''}
                                 </div>
@@ -350,7 +452,7 @@
                     ` : `
                         <div class="text-center py-16 text-gray-400">
                             <h3 class="text-xl mb-2">لا يوجد محتوى</h3>
-                            <p>انقر على "إضافة جديد" لبدء إضافة المحتوى</p>
+                            <p>${currentData.isShared ? 'هذه مادة مشتركة، سيتم إضافة المحتوى هنا' : 'انقر على "إضافة جديد" لبدء إضافة المحتوى'}</p>
                         </div>
                     `}
                 `;
@@ -360,8 +462,11 @@
 
         // Open item (section, folder, or content)
         async function openItem(itemId, itemName, itemType, index = -1) {
+            console.log('Opening item:', {itemId, itemName, itemType, index});
+            
             if (index !== -1) {
                 const item = currentData.items[index];
+                console.log('Item details:', item);
                 
                 if (item.isPrivate && !item.unlocked) {
                     passwordProtectedItem = { index, item };
@@ -369,9 +474,15 @@
                     return;
                 }
 
-                if (item.type === 'folder') {
-                    // فتح الفولدر - التصحيح هنا
-                    currentPath.push({ type: 'folder', id: itemId, name: itemName });
+                if (item.type === 'folder' || item.type === 'shared') {
+                    // فتح الفولدر أو المادة المشتركة
+                    currentPath.push({ 
+                        type: item.type, 
+                        id: item.id, 
+                        name: item.name, 
+                        sharedId: item.sharedId 
+                    });
+                    console.log('New path:', currentPath);
                     await loadCurrentPath();
                 } else if (item.type === 'text' || item.type === 'youtube') {
                     displayContent(item);
@@ -379,6 +490,7 @@
             } else {
                 // فتح قسم
                 currentPath.push({ type: itemType, id: itemId, name: itemName });
+                console.log('New path (section):', currentPath);
                 await loadCurrentPath();
             }
         }
@@ -489,14 +601,17 @@
         }
 
         // Add new item
-        function addItem() {
+        async function addItem() {
             const name = document.getElementById('itemName').value.trim();
             const type = document.getElementById('itemType').value;
             const content = document.getElementById('itemContent').value.trim();
             const isPrivate = document.getElementById('isPrivate').checked;
             const password = document.getElementById('itemPassword').value;
 
-            if (!name) return;
+            if (!name) {
+                alert('يرجى إدخال اسم العنصر');
+                return;
+            }
 
             const newItem = {
                 id: generateId(),
@@ -509,15 +624,37 @@
                 createdAt: new Date().toISOString()
             };
 
-            if (!currentData.items) currentData.items = [];
-            currentData.items.push(newItem);
-            
-            // Mark as pending change - FIXED: Save in correct location
-            const currentLocationId = currentPath.length > 0 ? currentPath[currentPath.length - 1].id : 'root';
-            if (!pendingChanges[currentLocationId]) pendingChanges[currentLocationId] = [];
-            pendingChanges[currentLocationId].push({ type: 'add', item: newItem });
+            // إذا كنا نضيف إلى مادة مشتركة
+            if (currentData.isShared) {
+                try {
+                    // تحديث المادة المشتركة في Firebase
+                    const subjectRef = db.collection('sharedSubjects').doc(currentData.id);
+                    await subjectRef.update({
+                        items: firebase.firestore.FieldValue.arrayUnion(newItem)
+                    });
+                    
+                    // إعادة تحميل البيانات
+                    await loadSharedSubjects();
+                    await loadCurrentPath();
+                    alert('تم إضافة العنصر بنجاح!');
+                } catch (error) {
+                    console.error('Error adding item to shared subject:', error);
+                    alert('حدث خطأ أثناء إضافة العنصر');
+                }
+            } else {
+                // إضافة إلى فولدر عادي
+                if (!currentData.items) currentData.items = [];
+                currentData.items.push(newItem);
+                
+                // Mark as pending change
+                const currentLocationId = currentPath.length > 0 ? currentPath[currentPath.length - 1].id : 'root';
+                if (!pendingChanges[currentLocationId]) pendingChanges[currentLocationId] = [];
+                pendingChanges[currentLocationId].push({ type: 'add', item: newItem });
 
-            updateContentArea();
+                updateContentArea();
+                alert('تم إضافة العنصر بنجاح! سيتم حفظه عند الضغط على "حفظ كل التحديثات"');
+            }
+            
             closeModal('addItemModal');
         }
 
@@ -551,6 +688,7 @@
                 await db.collection('sections').doc(id).set(newSection);
                 closeModal('addSectionModal');
                 loadSections(); // Reload sections to show the new one
+                alert('تم إضافة القسم بنجاح!');
             } catch (error) {
                 console.error('Error adding section:', error);
                 alert('حدث خطأ أثناء إضافة القسم');
@@ -558,16 +696,37 @@
         }
 
         // Delete item
-        function deleteItem(index) {
+        async function deleteItem(index) {
             if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
-                const deletedItem = currentData.items.splice(index, 1)[0];
-                
-                // Mark as pending change - FIXED: Save in correct location
-                const currentLocationId = currentPath.length > 0 ? currentPath[currentPath.length - 1].id : 'root';
-                if (!pendingChanges[currentLocationId]) pendingChanges[currentLocationId] = [];
-                pendingChanges[currentLocationId].push({ type: 'delete', itemId: deletedItem.id });
+                // إذا كنا نحذف من مادة مشتركة
+                if (currentData.isShared) {
+                    try {
+                        const itemToDelete = currentData.items[index];
+                        const subjectRef = db.collection('sharedSubjects').doc(currentData.id);
+                        await subjectRef.update({
+                            items: firebase.firestore.FieldValue.arrayRemove(itemToDelete)
+                        });
+                        
+                        // إعادة تحميل البيانات
+                        await loadSharedSubjects();
+                        await loadCurrentPath();
+                        alert('تم حذف العنصر بنجاح!');
+                    } catch (error) {
+                        console.error('Error deleting item from shared subject:', error);
+                        alert('حدث خطأ أثناء حذف العنصر');
+                    }
+                } else {
+                    // حذف من فولدر عادي
+                    const deletedItem = currentData.items.splice(index, 1)[0];
+                    
+                    // Mark as pending change
+                    const currentLocationId = currentPath.length > 0 ? currentPath[currentPath.length - 1].id : 'root';
+                    if (!pendingChanges[currentLocationId]) pendingChanges[currentLocationId] = [];
+                    pendingChanges[currentLocationId].push({ type: 'delete', itemId: deletedItem.id });
 
-                updateContentArea();
+                    updateContentArea();
+                    alert('تم حذف العنصر بنجاح! سيتم حفظ التغيير عند الضغط على "حفظ كل التحديثات"');
+                }
             }
         }
 
@@ -577,6 +736,7 @@
                 try {
                     await db.collection('sections').doc(sectionId).delete();
                     loadSections(); // Reload sections to reflect the deletion
+                    alert('تم حذف القسم بنجاح!');
                 } catch (error) {
                     console.error('Error deleting section:', error);
                     alert('حدث خطأ أثناء حذف القسم');
@@ -632,31 +792,65 @@
         async function saveAllChanges() {
             try {
                 for (const [locationId, changes] of Object.entries(pendingChanges)) {
-                    const docRef = db.collection('sections').doc(locationId);
-                    const doc = await docRef.get();
-                    
-                    if (doc.exists) {
-                        let data = doc.data();
-                        if (!data.items) data.items = [];
-                        
+                    if (locationId === 'root') {
+                        // Handle root level changes (sections)
                         for (const change of changes) {
                             if (change.type === 'add') {
-                                data.items.push(change.item);
+                                // Add new section
+                                await db.collection('sections').doc(change.item.id).set(change.item);
                             } else if (change.type === 'delete') {
-                                data.items = data.items.filter(item => item.id !== change.itemId);
+                                // Delete section
+                                await db.collection('sections').doc(change.itemId).delete();
                             }
                         }
+                    } else {
+                        // Handle folder level changes
+                        // Find the parent document (section or shared subject)
+                        let parentDocRef = null;
+                        let parentCollection = 'sections';
                         
-                        await docRef.update({ items: data.items });
+                        // Determine if this is a section or shared subject
+                        if (currentPath.length > 0 && currentPath[0].type === 'section') {
+                            parentDocRef = db.collection('sections').doc(locationId);
+                        } else if (currentPath.length > 1 && currentPath[1].type === 'shared') {
+                            parentCollection = 'sharedSubjects';
+                            parentDocRef = db.collection('sharedSubjects').doc(locationId);
+                        }
+                        
+                        if (parentDocRef) {
+                            // Get current data
+                            const parentDoc = await parentDocRef.get();
+                            if (parentDoc.exists) {
+                                const parentData = parentDoc.data();
+                                
+                                // Apply changes
+                                for (const change of changes) {
+                                    if (change.type === 'add') {
+                                        if (!parentData.items) parentData.items = [];
+                                        parentData.items.push(change.item);
+                                    } else if (change.type === 'delete') {
+                                        parentData.items = parentData.items.filter(item => item.id !== change.itemId);
+                                    }
+                                }
+                                
+                                // Save updated data
+                                await parentDocRef.update({ items: parentData.items });
+                            }
+                        }
                     }
                 }
                 
+                // Clear pending changes
                 pendingChanges = {};
-                alert('تم حفظ جميع التحديثات بنجاح!');
-                loadCurrentPath();
+                document.getElementById('actionButtons').style.display = 'none';
+                
+                // Reload current data
+                await loadCurrentPath();
+                
+                alert('تم حفظ التعديلات بنجاح!');
             } catch (error) {
                 console.error('Error saving changes:', error);
-                alert('حدث خطأ أثناء الحفظ');
+                alert('حدث خطأ أثناء حفظ التعديلات');
             }
         }
 
@@ -664,11 +858,12 @@
         function cancelChanges() {
             if (confirm('هل تريد إلغاء جميع التعديلات غير المحفوظة؟')) {
                 pendingChanges = {};
+                document.getElementById('actionButtons').style.display = 'none';
                 loadCurrentPath();
             }
         }
 
-        // Initialize the app
+        // Initialize the app when the page loads
         window.onload = initApp;
     </script>
 </body>
