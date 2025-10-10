@@ -1,0 +1,1412 @@
+<html lang="ar" dir="rtl"><head><script>(function(firebaseConfig, initialAuthToken, appId) {
+        window.__firebase_config = firebaseConfig;
+        window.__initial_auth_token = initialAuthToken;
+        window.__app_id = appId;
+            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjIyMGExMzQ5NmMwYWQ5MjJkZmZkZGViMjk3MzJlZDQ4ZjFlY2Q0YTMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIxNDkzNzMxOTY1MjY2OTkyNjc1NSIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjX2I5M2I5NDU3YzUwZGJjMjdfc3R1ZHlfcGxhbm5lcl9tdWx0aS5odG1sLTM3NiJ9LCJleHAiOjE3NjAxMTcxNDEsImlhdCI6MTc2MDExMzU0MSwiYWxnIjoiUlMyNTYifQ.AIU5rP0XpJC1M1iwLPb9EqEl71f7rRhA3jBEmYQMRTFyLgtx2mALZMPL1RuCITQQHUaX_nko4NIDQR5i_IQwMFd-V9nuq5qF7zkStLFv4S3_iEKx8N5IJAdUz4Vo1eimOdYoPMO8EbvQqQfuzcMH-k-5-sJuyKkrge4An_l-KIWEIAA_jPtM37omLd5yY45yNFa2zoEGqXnYFFGxGAMiIU9JkWaSTh7Nc1JEratwOK1dcBw_VZgNLS2zHtR-ead8ku3xHmn-sBZKCycYbtb-8oLHrb7ie0FY65NJUn09iGmsBcaQ88i31p8U1-HDd6eoBNJ-IK3l3vfSSo21hNNASQ","c_b93b9457c50dbc27_study_planner_multi.html-376")</script><script>'use strict';var h=typeof Object.defineProperties=="function"?Object.defineProperty:function(a,b,d){if(a==Array.prototype||a==Object.prototype)return a;a[b]=d.value;return a};function l(a){a=["object"==typeof globalThis&&globalThis,a,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var b=0;b<a.length;++b){var d=a[b];if(d&&d.Math==Math)return d}throw Error("Cannot find global object");}var n=l(this);
+function p(a,b){if(b)a:{var d=n;a=a.split(".");for(var c=0;c<a.length-1;c++){var e=a[c];if(!(e in d))break a;d=d[e]}a=a[a.length-1];c=d[a];b=b(c);b!=c&&b!=null&&h(d,a,{configurable:!0,writable:!0,value:b})}}function r(a){function b(c){return a.next(c)}function d(c){return a.throw(c)}return new Promise(function(c,e){function f(g){g.done?c(g.value):Promise.resolve(g.value).then(b,d).then(f,e)}f(a.next())})}function t(a){return r(a())}
+p("Object.values",function(a){return a?a:function(b){var d=[],c;for(c in b)Object.prototype.hasOwnProperty.call(b,c)&&d.push(b[c]);return d}});p("Array.prototype.includes",function(a){return a?a:function(b,d){var c=this;c instanceof String&&(c=String(c));var e=c.length;d=d||0;for(d<0&&(d=Math.max(d+e,0));d<e;d++){var f=c[d];if(f===b||Object.is(f,b))return!0}return!1}});/*
+
+ MIT License
+
+ Copyright (c) 2017-2023 W.Y.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+*/
+function u(a,b){const d=a.style;b.backgroundColor&&(d.backgroundColor=b.backgroundColor);b.width&&(d.width=`${b.width}px`);b.height&&(d.height=`${b.height}px`);const c=b.style;c!=null&&Object.keys(c).forEach(e=>{d[e]=c[e]})};var v=(()=>{let a=0;return()=>{a+=1;return`u${`0000${(Math.random()*1679616<<0).toString(36)}`.slice(-4)}${a}`}})();function w(a){const b=[];for(let d=0,c=a.length;d<c;d++)b.push(a[d]);return b}let x=null;function y(a={}){return x?x:a.l?x=a.l:x=w(window.getComputedStyle(document.documentElement))}function z(a,b){return(a=(a.ownerDocument.defaultView||window).getComputedStyle(a).getPropertyValue(b))?parseFloat(a.replace("px","")):0}
+function A(a,b={}){var d;if(!(d=b.width)){d=z(a,"border-left-width");var c=z(a,"border-right-width");d=a.clientWidth+d+c}(b=b.height)||(b=z(a,"border-top-width"),c=z(a,"border-bottom-width"),b=a.clientHeight+b+c);return{width:d,height:b}}function B(a){return new Promise((b,d)=>{const c=new Image;c.onload=()=>{c.decode().then(()=>{requestAnimationFrame(()=>b(c))})};c.onerror=d;c.crossOrigin="anonymous";c.decoding="async";c.src=a})}
+function C(a){return t(function*(){return Promise.resolve().then(()=>(new XMLSerializer).serializeToString(a)).then(encodeURIComponent).then(b=>`data:image/svg+xml;charset=utf-8,${b}`)})}
+function D(a,b,d){return t(function*(){const c=document.createElementNS("http://www.w3.org/2000/svg","svg"),e=document.createElementNS("http://www.w3.org/2000/svg","foreignObject");c.setAttribute("width",`${b}`);c.setAttribute("height",`${d}`);c.setAttribute("viewBox",`0 0 ${b} ${d}`);e.setAttribute("width","100%");e.setAttribute("height","100%");e.setAttribute("x","0");e.setAttribute("y","0");e.setAttribute("externalResourcesRequired","true");c.appendChild(e);e.appendChild(a);return C(c)})}
+var E=(a,b)=>{if(a instanceof b)return!0;a=Object.getPrototypeOf(a);return a===null?!1:a.constructor.name===b.name||E(a,b)};function F(a,b){return y(b).map(d=>{const c=a.getPropertyValue(d),e=a.getPropertyPriority(d);return`${d}: ${c}${e?" !important":""};`}).join(" ")}
+function G(a,b,d,c){a=window.getComputedStyle(a,d);var e=a.getPropertyValue("content");if(e!==""&&e!=="none"){var f=v();try{b.className=`${b.className} ${f}`}catch(k){return}e=document.createElement("style");var g=e.appendChild;d=`.${f}:${d}`;a.cssText?(c=a.getPropertyValue("content"),c=`${a.cssText} content: '${c.replace(/'|"/g,"")}';`):c=F(a,c);g.call(e,document.createTextNode(`${d}{${c}}`));b.appendChild(e)}};function H(a){return a.search(/^(data:)/)!==-1}function I(a,b,d){return t(function*(){const c=yield fetch(a,b);if(c.status===404)throw Error(`Resource "${c.url}" not found`);const e=yield c.blob();return new Promise((f,g)=>{const k=new FileReader;k.onerror=g;k.onloadend=()=>{try{f(d({o:c,result:k.result}))}catch(m){g(m)}};k.readAsDataURL(e)})})}const J={};function K(a,b,d){let c=a.replace(/\?.*/,"");d&&(c=a);/ttf|otf|eot|woff2?/i.test(c)&&(c=c.replace(/.*\//,""));return b?`[${b}]${c}`:c}
+function L(a,b,d){return t(function*(){const c=K(a,b,d.C);if(J[c]!=null)return J[c];d.u&&(a+=(/\?/.test(a)?"&":"?")+(new Date).getTime());let e;try{const f=yield I(a,d.i,({o:g,result:k})=>{b||(b=g.headers.get("Content-Type")||"");return k.split(/,/)[1]});e=`data:${b};base64,${f}`}catch(f){e=d.B||""}return J[c]=e})};const M={P:"application/font-woff",R:"application/font-woff",N:"application/font-truetype",v:"application/vnd.ms-fontobject",H:"image/png",F:"image/jpeg",D:"image/jpeg",A:"image/gif",M:"image/tiff",L:"image/svg+xml",O:"image/webp"};function N(a){return(a=/\.([^./]*?)$/g.exec(a))?a[1]:""};function O(a){return t(function*(){const b=a.toDataURL();return b==="data:,"?a.cloneNode(!1):B(b)})}function aa(a,b){return t(function*(){if(a.currentSrc){var d=document.createElement("canvas");const c=d.getContext("2d");d.width=a.clientWidth;d.height=a.clientHeight;c==null||c.drawImage(a,0,0,d.width,d.height);d=d.toDataURL();return B(d)}d=a.poster;d=yield L(d,M[N(d).toLowerCase()]||"",b);return B(d)})}
+function ba(a,b){return t(function*(){try{let d;if(a==null?0:(d=a.contentDocument)==null?0:d.body)return yield P(a.contentDocument.body,b,!0)}catch(d){}return a.cloneNode(!1)})}function ca(a,b){return t(function*(){return E(a,HTMLCanvasElement)?O(a):E(a,HTMLVideoElement)?aa(a,b):E(a,HTMLIFrameElement)?ba(a,b):a.cloneNode(a.tagName!=null&&a.tagName.toUpperCase()==="SVG")})}
+function da(a,b,d){return t(function*(){if(b.tagName!=null&&b.tagName.toUpperCase()==="SVG")return b;let c=[];if(a.tagName!=null&&a.tagName.toUpperCase()==="SLOT"&&a.assignedNodes)c=w(a.assignedNodes());else{let e;if(E(a,HTMLIFrameElement)&&((e=a.contentDocument)==null?0:e.body))c=w(a.contentDocument.body.childNodes);else{let f;c=w(((f=a.shadowRoot)!=null?f:a).childNodes)}}if(c.length===0||E(a,HTMLVideoElement))return b;yield c.reduce((e,f)=>e.then(()=>P(f,d)).then(g=>{g&&b.appendChild(g)}),Promise.resolve());
+return b})}function ea(a,b,d){const c=b.style;if(c){var e=window.getComputedStyle(a);e.cssText?(c.cssText=e.cssText,c.transformOrigin=e.transformOrigin):y(d).forEach(f=>{let g=e.getPropertyValue(f);f==="font-size"&&g.endsWith("px")&&(g=`${Math.floor(parseFloat(g.substring(0,g.length-2)))-.1}px`);E(a,HTMLIFrameElement)&&f==="display"&&g==="inline"&&(g="block");f==="d"&&b.getAttribute("d")&&(g=`path(${b.getAttribute("d")})`);c.setProperty(f,g,e.getPropertyPriority(f))})}}
+function fa(a,b){E(a,HTMLSelectElement)&&(b=Array.from(b.children).find(d=>a.value===d.getAttribute("value")))&&b.setAttribute("selected","")}
+function ha(a,b){return t(function*(){var d=a.querySelectorAll?a.querySelectorAll("use"):[];if(d.length===0)return a;var c={};for(var e=0;e<d.length;e++){var f=d[e].getAttribute("xlink:href");if(f){const g=document.querySelector(f);a.querySelector(f)||!g||c[f]||(c[f]=yield P(g,b,!0))}}d=Object.values(c);if(d.length){c=document.createElementNS("http://www.w3.org/1999/xhtml","svg");c.setAttribute("xmlns","http://www.w3.org/1999/xhtml");c.style.position="absolute";c.style.width="0";c.style.height="0";
+c.style.overflow="hidden";c.style.display="none";e=document.createElementNS("http://www.w3.org/1999/xhtml","defs");c.appendChild(e);for(f=0;f<d.length;f++)e.appendChild(d[f]);a.appendChild(c)}return a})}
+function P(a,b,d){return t(function*(){return d||!b.filter||b.filter(a)?Promise.resolve(a).then(c=>ca(c,b)).then(c=>da(a,c,b)).then(c=>{E(c,Element)&&(ea(a,c,b),G(a,c,":before",b),G(a,c,":after",b),E(a,HTMLTextAreaElement)&&(c.textContent=a.value),E(a,HTMLInputElement)&&c.setAttribute("value",a.value),fa(a,c));return c}).then(c=>ha(c,b)):null})};const Q=/url\((['"]?)([^'"]+?)\1\)/g,ia=/url\([^)]+\)\s*format\((["']?)([^"']+)\1\)/g,ja=/src:\s*(?:url\([^)]+\)\s*format\([^)]+\)[,;]\s*)+/g;function ka(a){const b=[];a.replace(Q,(d,c,e)=>{b.push(e);return d});return b.filter(d=>!H(d))}
+function la(a,b,d,c){return t(function*(){try{const e=d?(new URL(b,d||void 0)).toString():b;let f;f=yield L(e,M[N(b).toLowerCase()]||"",c);return a.replace(new RegExp(`(url\\(['"]?)(${b.replace(/([.*+?^${}()|\[\]\/\\])/g,"\\$1")})(['"]?\\))`,"g"),`$1${f}$3`)}catch(e){}return a})}function ma(a,{I:b}){return b?a.replace(ja,d=>{for(;;){const [c,,e]=ia.exec(d)||[],f=c,g=e;if(!g)return"";if(g===b)return`src: ${f};`}}):a}
+function R(a,b,d){return t(function*(){if(a.search(Q)===-1)return a;const c=ma(a,d);return ka(c).reduce((e,f)=>e.then(g=>la(g,f,b,d)),Promise.resolve(c))})};function S(a,b,d){return t(function*(){var c;const e=(c=b.style)==null?void 0:c.getPropertyValue(a);return e?(c=yield R(e,null,d),b.style.setProperty(a,c,b.style.getPropertyPriority(a)),!0):!1})}function na(a,b){return t(function*(){(yield S("background",a,b))||(yield S("background-image",a,b));(yield S("mask",a,b))||(yield S("-webkit-mask",a,b))||(yield S("mask-image",a,b))||(yield S("-webkit-mask-image",a,b))})}
+function oa(a,b){return t(function*(){const d=E(a,HTMLImageElement);if(d&&!H(a.src)||E(a,SVGImageElement)&&!H(a.href.baseVal)){var c=d?a.src:a.href.baseVal,e=yield L(c,M[N(c).toLowerCase()]||"",b);yield new Promise((f,g)=>{a.onload=f;a.onerror=b.m?(...k)=>{try{f(b.m(...k))}catch(m){g(m)}}:g;a.decode&&(a.decode=f);a.loading==="lazy"&&(a.loading="eager");d?(a.srcset="",a.src=e):a.href.baseVal=e})}})}
+function pa(a,b){return t(function*(){const d=w(a.childNodes).map(c=>T(c,b));yield Promise.all(d).then(()=>a)})}function T(a,b){return t(function*(){E(a,Element)&&(yield na(a,b),yield oa(a,b),yield pa(a,b))})};const U={};function V(a){return t(function*(){var b=U[a];if(b!=null)return b;b=yield(yield fetch(a)).text();b={url:a,cssText:b};return U[a]=b})}function W(a,b){return t(function*(){let d=a.cssText;const c=/url\(["']?([^"')]+)["']?\)/g,e=(d.match(/url\([^)]+\)/g)||[]).map(f=>t(function*(){let g=f.replace(c,"$1");g.startsWith("https://")||(g=(new URL(g,a.url)).href);return I(g,b.i,({result:k})=>{d=d.replace(f,`url(${k})`);return[f,k]})}));return Promise.all(e).then(()=>d)})}
+function X(a){if(a==null)return[];const b=[];a=a.replace(/(\/\*[\s\S]*?\*\/)/gi,"");for(var d=RegExp("((@.*?keyframes [\\s\\S]*?){([\\s\\S]*?}\\s*?)})","gi");;){var c=d.exec(a);if(c===null)break;b.push(c[0])}a=a.replace(d,"");d=/@import[\s\S]*?url\([^)]*\)[\s\S]*?;/gi;for(c=RegExp("((\\s*?(?:\\/\\*[\\s\\S]*?\\*\\/)?\\s*?@media[\\s\\S]*?){([\\s\\S]*?)}\\s*?})|(([\\s\\S]*?){([\\s\\S]*?)})","gi");;){let e=d.exec(a);if(e===null)if(e=c.exec(a),e===null)break;else d.lastIndex=c.lastIndex;else c.lastIndex=
+d.lastIndex;b.push(e[0])}return b}
+function qa(a,b){return t(function*(){const d=[],c=[];a.forEach(e=>{if("cssRules"in e)try{w(e.cssRules||[]).forEach((f,g)=>{if(f.type===CSSRule.IMPORT_RULE){let k=g+1;f=V(f.href).then(m=>W(m,b)).then(m=>X(m).forEach(q=>{try{e.insertRule(q,q.startsWith("@import")?k+=1:e.cssRules.length)}catch(Da){}})).catch(()=>{});c.push(f)}})}catch(f){const g=a.find(k=>k.href==null)||document.styleSheets[0];e.href!=null&&c.push(V(e.href).then(k=>W(k,b)).then(k=>X(k).forEach(m=>{g.insertRule(m,g.cssRules.length)})).catch(()=>
+{}))}});return Promise.all(c).then(()=>{a.forEach(e=>{if("cssRules"in e)try{w(e.cssRules||[]).forEach(f=>{d.push(f)})}catch(f){}});return d})})}function ra(a){return a.filter(b=>b.type===CSSRule.FONT_FACE_RULE).filter(b=>b.style.getPropertyValue("src").search(Q)!==-1)}function sa(a,b){return t(function*(){if(a.ownerDocument==null)throw Error("Provided element is not within a Document");var d=w(a.ownerDocument.styleSheets);d=yield qa(d,b);return ra(d)})}
+function ta(a){function b(c){(c.style.fontFamily||getComputedStyle(c).fontFamily).split(",").forEach(e=>{d.add(e.trim().replace(/["']/g,""))});Array.from(c.children).forEach(e=>{e instanceof HTMLElement&&b(e)})}const d=new Set;b(a);return d}function ua(a,b){return t(function*(){const d=yield sa(a,b),c=ta(a);return(yield Promise.all(d.filter(e=>c.has(e.style.fontFamily.trim().replace(/["']/g,""))).map(e=>R(e.cssText,e.parentStyleSheet?e.parentStyleSheet.href:null,b)))).join("\n")})}
+function va(a,b){return t(function*(){const d=b.j!=null?b.j:b.K?null:yield ua(a,b);if(d){const c=document.createElement("style");c.appendChild(document.createTextNode(d));a.firstChild?a.insertBefore(c,a.firstChild):a.appendChild(c)}})};function wa(a,b={}){return t(function*(){const {width:d,height:c}=A(a,b),e=yield P(a,b,!0);yield va(e,b);yield T(e,b);u(e,b);return yield D(e,d,c)})}
+function xa(a,b={}){return t(function*(){const {width:d,height:c}=A(a,b);var e=yield wa(a,b);e=yield B(e);const f=document.createElement("canvas"),g=f.getContext("2d"),k=b.G||window.devicePixelRatio||1,m=b.h||d,q=b.g||c;f.width=m*k;f.height=q*k;!b.J&&(f.width>16384||f.height>16384)&&(f.width>16384&&f.height>16384?f.width>f.height?(f.height*=16384/f.width,f.width=16384):(f.width*=16384/f.height,f.height=16384):f.width>16384?(f.height*=16384/f.width,f.width=16384):(f.width*=16384/f.height,f.height=
+16384));f.style.width=`${m}`;f.style.height=`${q}`;b.backgroundColor&&(g.fillStyle=b.backgroundColor,g.fillRect(0,0,f.width,f.height));g.drawImage(e,0,0,f.width,f.height);return f})}function ya(a,b={}){return t(function*(){return(yield xa(a,b)).toDataURL()})};const za=["gemini.google.com","corp.google.com","proxy.googlers.com"];function Y(){return document.body.querySelectorAll('[class*="animate"]').length>0}function Z(a){return t(function*(){try{return yield ya(a,{h:a.offsetWidth,g:a.offsetHeight})}catch(d){var b=a.offsetHeight;const c=document.createElement("canvas");c.width=a.offsetWidth;c.height=b;return c.toDataURL("image/png")}})}
+function Aa(){return t(function*(){const a=document.body.offsetWidth,b=document.body.offsetHeight,d=document.body.cloneNode(!0);d.querySelectorAll('[class*="animate"]').forEach(c=>{c.classList.remove(...Array.from(c.classList).filter(e=>e.startsWith("animate")))});d.style.width=`${a}px`;d.style.height=`${b}px`;return d})}
+function Ba(a){return t(function*(){let b=document.body;if(Y()){var d=yield Aa();b=d;document.body.appendChild(d)}d=yield Z(b);Y()&&document.body.removeChild(b);window.parent.postMessage({type:"SEND_SCREENSHOT",image:d,topOffset:document.documentElement.scrollTop},a.origin)})}function Ca(a){return t(function*(){const b={type:"SEND_SCREENSHOT_FOR_DATA_VISUALIZATION",image:yield Z(document.body),topOffset:0};window.parent.postMessage(b,a.origin)})}
+window.addEventListener("message",a=>t(function*(){if(za.some(d=>a.origin.includes(d))){var b=a.data;b&&(b.type==="MAKE_SCREENSHOT"&&(yield Ba(a)),b.type==="MAKE_SCREENSHOT_FOR_DATA_VISUALIZATION"&&(yield Ca(a)))}}));
+</script><script>(function() {
+  // Ensure this script is executed only once
+  if (window.firebaseAuthBridgeScriptLoaded) {
+    return;
+  }
+  window.firebaseAuthBridgeScriptLoaded = true;
+
+  let nextTokenPromiseId = 0;
+
+  // Stores { resolve, reject } for ongoing token requests
+  const pendingTokenPromises = {};
+
+  // Listen for messages from the Host Application
+  window.addEventListener('message', function(event) {
+
+    const messageData = event.data;
+
+  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
+      const { success, token, error, promiseId } = messageData ?? {};
+      if (pendingTokenPromises[promiseId]) {
+        if (success) {
+          pendingTokenPromises[promiseId].resolve(token);
+        } else {
+          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
+        }
+        delete pendingTokenPromises[promiseId];
+      }
+    }
+  });
+
+  // Expose a function for the Generated App to request a new Firebase token
+  window.requestNewFirebaseToken = function() {
+    const currentPromiseId = nextTokenPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingTokenPromises[currentPromiseId] = { resolve, reject };
+    });
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'REQUEST_NEW_FIREBASE_TOKEN',
+        promiseId: currentPromiseId
+      }, '*');
+    } else {
+      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
+      delete pendingTokenPromises[currentPromiseId];
+    }
+    return promise;
+  };
+})();</script><script>
+let realOriginalGetUserMedia = null;
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+}
+
+(function() {
+  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
+    try {
+      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
+        get: function() {
+          return undefined; // Or throw an error
+        },
+        configurable: false
+      });
+    } catch (error) {
+      console.error("Error defining prototype getter:", error);
+    }
+  }
+})();
+
+(function() {
+  const pendingMediaResolvers = {};
+  let nextMediaPromiseId = 0;
+
+  function requestMediaPermissions(constraints) {
+    const mediaPromiseId = nextMediaPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingMediaResolvers[mediaPromiseId] = (granted) => {
+        delete pendingMediaResolvers[mediaPromiseId];
+        resolve(granted);
+      };
+    });
+
+    window.parent.postMessage({
+      type: 'requestMediaPermission',
+      constraints: constraints,
+      promiseId: mediaPromiseId,
+    }, '*');
+
+    return promise;
+  }
+
+  let originalGetUserMedia = realOriginalGetUserMedia;
+
+  function interceptGetUserMedia() {
+    if (navigator.mediaDevices) {
+      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+        value: function(constraints) {
+          return requestMediaPermissions(constraints).then((granted) => {
+            if (granted) {
+              if (originalGetUserMedia) {
+                return originalGetUserMedia(constraints);
+              } else {
+                throw new Error("Original getUserMedia not available.");
+              }
+            } else {
+              throw new DOMException('Permission denied', 'NotAllowedError');
+            }
+          });
+        },
+        writable: false,
+        configurable: false
+      });
+    }
+  }
+
+  interceptGetUserMedia();
+
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'childList' && mutation.addedNodes) {
+        mutation.addedNodes.forEach(node => {
+          if (node === navigator.mediaDevices) {
+            interceptGetUserMedia();
+          }
+        });
+      }
+    }
+  });
+
+  function interceptSpeechRecognition() {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      return;
+    }
+
+    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const SpeechRecognitionWrapper = function(...args) {
+      const recognizer = new OriginalSpeechRecognition(...args);
+      const originalStart = recognizer.start.bind(recognizer);
+
+      recognizer.start = function() {
+        requestMediaPermissions({ audio: true }).then(granted => {
+          if (granted) {
+            originalStart();
+          } else {
+            const errorEvent = new SpeechRecognitionErrorEvent('error');
+            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
+            recognizer.dispatchEvent(errorEvent);
+          }
+        });
+      };
+
+      return recognizer;
+    };
+
+    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
+    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
+
+    if (window.SpeechRecognition) {
+      window.SpeechRecognition = SpeechRecognitionWrapper;
+    }
+    if (window.webkitSpeechRecognition) {
+      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
+    }
+  }
+
+  interceptSpeechRecognition();
+
+  window.addEventListener('message', function(event) {
+    if (event.data) {
+      if (event.data.type === 'resolveMediaPermission') {
+        const { promiseId, granted } = event.data;
+        if (pendingMediaResolvers[promiseId]) {
+          pendingMediaResolvers[promiseId](granted);
+        }
+      }
+    }
+  });
+
+})();</script><script>((function(modelInformation) {
+  const originalFetch = window.fetch;
+  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
+  let googleLlmBaseApiUrls = [
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
+  ];
+  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+    );
+  });
+
+  const pendingFetchResolvers = {};
+  let nextPromiseId = 0;
+
+  function handleStringInput(input, optionsArgument) {
+    const actualUrl = input;
+    const fetchCallArgs = [actualUrl, optionsArgument];
+    const effectiveOptions = optionsArgument || {};
+    const bodyForApiKeyCheck = effectiveOptions.body;
+    const bodyForPostMessage = effectiveOptions.body;
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  function handleRequestInput(input, optionsArgument) {
+    const actualUrl = input.url;
+    const fetchCallArgs = [input, optionsArgument];
+    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (optionsArgument) {
+      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
+      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
+      if ('body' in optionsArgument) {
+        bodyForApiKeyCheck = optionsArgument.body;
+        bodyForPostMessage = optionsArgument.body;
+      } else {
+        bodyForApiKeyCheck = undefined;
+        bodyForPostMessage = input.body;
+      }
+    } else {
+      bodyForApiKeyCheck = undefined;
+      bodyForPostMessage = input.body;
+    }
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  window.fetch = function(input, optionsArgument) {
+    let actualUrl;
+    let fetchCallArgs;
+    let effectiveOptions = {};
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (typeof input === 'string') {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
+    } else if (input instanceof Request) {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
+    } else {
+      return originalFetch.apply(window, [input, optionsArgument]);
+    }
+
+    effectiveOptions.method = effectiveOptions.method || 'GET';
+    if (!effectiveOptions.headers) {
+      effectiveOptions.headers = new Headers();
+    }
+
+
+    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
+      let apiKeyIsNull = true;
+
+      const regex = new RegExp("models/([^:]+)");
+      const modelNameMatch = actualUrl.match(regex);
+      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
+
+
+      try {
+        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
+        const apiKeyParam = urlObject.searchParams.get('key');
+        if (apiKeyParam) {
+          apiKeyIsNull = false;
+        }
+      } catch (e) {
+        // Continue checks even if URL parsing fails
+      }
+
+      if (apiKeyIsNull && effectiveOptions.headers) {
+        const h = new Headers(effectiveOptions.headers);
+        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
+        if (apiKeyHeaderValue) {
+          apiKeyIsNull = false;
+          return originalFetch.apply(window, fetchCallArgs);
+        }
+      }
+
+      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
+        try {
+          const bodyData = JSON.parse(bodyForApiKeyCheck);
+          if (bodyData && bodyData.apiKey) {
+            apiKeyIsNull = false;
+            return originalFetch.apply(window, fetchCallArgs);
+          }
+        } catch (e) {
+          // Ignore JSON parsing errors
+        }
+      }
+
+      if(apiKeyIsNull) {
+        const promiseId = nextPromiseId++;
+        const promise = new Promise((resolve) => {
+          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
+            delete pendingFetchResolvers[promiseId];
+            resolve(resolvedResponse);
+          };
+        });
+
+        let serializedBodyForPostMessage;
+        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
+            serializedBodyForPostMessage = bodyForPostMessage;
+        } else if (bodyForPostMessage instanceof ReadableStream) {
+            serializedBodyForPostMessage = null;
+        } else {
+            try {
+                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
+            } catch (e) {
+                serializedBodyForPostMessage = null;
+            }
+        }
+
+        const messageOptions = {
+            method: effectiveOptions.method,
+            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
+            body: serializedBodyForPostMessage
+        };
+
+        window.parent.postMessage({
+          type: 'requestFetch',
+          url: actualUrl,
+          modelName: modelName,
+          options: messageOptions,
+          promiseId: promiseId,
+        }, '*');
+
+        return promise;
+      }
+      return originalFetch.apply(window, fetchCallArgs);
+    }
+    return originalFetch.apply(window, fetchCallArgs);
+  };
+
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'resolveFetch') {
+      const { promiseId, response } = event.data;
+      if (pendingFetchResolvers[promiseId]) {
+        try {
+          const reconstructedResponse = new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: new Headers(response.headers),
+          });
+          pendingFetchResolvers[promiseId](reconstructedResponse);
+        } catch (error) {
+          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
+        }
+      }
+    }
+  });
+
+}))({"textModelName":"gemini-2.5-flash-preview-05-20","imageModelName":"imagen-3.0-generate-002","imageEditModelName":"gemini-2.5-flash-image-preview","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash-preview-04-17"]})</script><script>(function() {
+  const originalConsoleLog = console.log;
+  const originalConsoleError = console.error;
+
+    /**
+   * Normalizes an error event or a promise rejection reason into a structured error object.
+   * @param {*} errorEventOrReason The error object or reason.
+   * @return {object} Structured error data { message, name, stack }.
+   */
+  function getErrorObject(errorEventOrReason) {
+    if (errorEventOrReason instanceof Error) {
+      return {
+        message: errorEventOrReason.message,
+        name: errorEventOrReason.name,
+        stack: errorEventOrReason.stack,
+      };
+    }
+    // Fallback for non-Error objects.
+    try {
+      return {
+        message: JSON.stringify(errorEventOrReason),
+        name: 'UnknownErrorType',
+        stack: null,
+      };
+    } catch (e) {
+      return {
+        message: String(errorEventOrReason),
+        name: 'UnknownErrorTypeNonStringifiable',
+        stack: null,
+      };
+    }
+  }
+
+  /**
+   * Converts an array of arguments (from log/error) into a single string.
+   * Handles Error objects specially to include their message and stack.
+   * @param {Array<*>} args - Arguments passed to console methods.
+   * @return {string} A string representation of the arguments.
+   */
+  function stringifyArgs(args) {
+    return args
+      .map((arg) => {
+        if (arg instanceof Error) {
+          const {message, stack} = arg;
+          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
+        }
+        if (typeof arg === 'object' && arg !== null) {
+          try {
+            return JSON.stringify(arg);
+          } catch (error) {
+            return '[Circular Object]';
+          }
+        } else {
+          return String(arg);
+        }
+      })
+      .join(' ');
+  }
+
+  console.log = function(...args) {
+    const logString = stringifyArgs(args);
+    window.parent.postMessage({ type: 'log', message: logString }, '*');
+    originalConsoleLog.apply(console, args);
+  };
+
+  console.error = function(...args) {
+    let errorData;
+    if (args.length > 0 && args[0] instanceof Error) {
+      const err = args[0];
+      // If the first arg is an Error, capture its details.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        ...getErrorObject(err),
+        rawArgsString: stringifyArgs(args.slice(1)),
+        timestamp: new Date().toISOString(),
+      };
+    } else {
+      // If not an Error object, treat all args as a general error message.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        message: stringifyArgs(args),
+        name: 'ConsoleLoggedError',
+        stack: null,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    window.parent.postMessage(errorData, '*');
+    originalConsoleError.apply(console, args);
+  };
+
+  // Listen for global unhandled synchronous errors.
+  window.addEventListener('error', function(event) {
+    const errorDetails = event.error ? getErrorObject(event.error) : {
+      message: event.message,
+      name: 'GlobalError',
+      stack: null,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+    };
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'global',
+      ...errorDetails,
+      message: errorDetails.message || event.message,
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+  // Listen for unhandled promise rejections (asynchronous errors).
+  window.addEventListener('unhandledrejection', function(event) {
+    const errorDetails = getErrorObject(event.reason);
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'unhandledrejection',
+      ...errorDetails,
+      message: errorDetails.message || 'Unhandled Promise Rejection',
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+})();</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مخطط دراسي وجدول كامل</title>
+    <!-- تحميل Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* إضافة خط Cairo */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        body {
+            font-family: 'Cairo', sans-serif;
+            /* خاصية التحويل (الزوم) */
+            transition: transform 0.2s ease-out;
+            transform-origin: top right;
+            width: 100%; 
+            min-height: 100vh;
+        }
+        /* تصميم Tab Bar بسيط */
+        .tab {
+            @apply border-b-2 border-transparent px-4 py-2 text-sm font-medium transition duration-150 ease-in-out;
+        }
+        .tab-active {
+            @apply border-b-2 border-blue-500 text-blue-600 dark:text-blue-400 dark:border-blue-400;
+        }
+        .tab:hover {
+            @apply text-blue-500 dark:text-blue-300;
+        }
+
+        /* تنسيق خاص لزر إظهار الأدوات */
+        #toggle-tools-btn {
+            @apply flex items-center gap-1 p-2 text-sm bg-gray-700 text-white rounded-full hover:bg-gray-800 dark:bg-gray-200 dark:text-gray-800 dark:hover:bg-gray-300 transition duration-150 shadow-md;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.invisible{visibility:hidden}.fixed{position:fixed}.sticky{position:sticky}.inset-0{inset:0px}.left-2{left:0.5rem}.top-12{top:3rem}.top-2{top:0.5rem}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.z-\[100\]{z-index:100}.m-1{margin:0.25rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.flex{display:flex}.hidden{display:none}.h-10{height:2.5rem}.h-16{height:4rem}.h-24{height:6rem}.h-3{height:0.75rem}.h-5{height:1.25rem}.w-1\/2{width:50%}.w-10{width:2.5rem}.w-16{width:4rem}.w-5{width:1.25rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.max-w-md{max-width:28rem}.flex-grow{flex-grow:1}.scale-95{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes spin{to{transform:rotate(360deg)}}.animate-spin{animation:spin 1s linear infinite}.cursor-pointer{cursor:pointer}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t-2{border-top-width:2px}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-300{--tw-bg-opacity:1;background-color:rgb(209 213 219 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.pb-2{padding-bottom:0.5rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-150{transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.hover\:bg-blue-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-300:hover{--tw-bg-opacity:1;background-color:rgb(209 213 219 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-400:hover{--tw-bg-opacity:1;background-color:rgb(156 163 175 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-600:hover{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.hover\:bg-green-600:hover{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-600:hover{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.hover\:bg-red-600:hover{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}}@media (min-width: 768px){.md\:p-8{padding:2rem}.md\:px-4{padding-left:1rem;padding-right:1rem}.md\:py-3{padding-top:0.75rem;padding-bottom:0.75rem}}.rtl\:space-x-reverse:where([dir="rtl"], [dir="rtl"] *) > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:1}@media (prefers-color-scheme: dark){.dark\:border-gray-600{--tw-border-opacity:1;border-color:rgb(75 85 99 / var(--tw-border-opacity, 1))}.dark\:border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81 / var(--tw-border-opacity, 1))}.dark\:bg-gray-600{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.dark\:bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81 / var(--tw-bg-opacity, 1))}.dark\:bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.dark\:bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.dark\:text-blue-400{--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.dark\:text-gray-200{--tw-text-opacity:1;color:rgb(229 231 235 / var(--tw-text-opacity, 1))}.dark\:text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.dark\:text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.dark\:text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.dark\:text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.dark\:hover\:bg-gray-500:hover{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-gray-600:hover{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}}@media print{.print\:hidden{display:none}}</style></head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+
+    <!-- أزرار التحكم في الزوم -->
+    <div class="fixed top-2 left-2 z-50 flex space-x-2 rtl:space-x-reverse print:hidden">
+        <button onclick="zoomOut()" class="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-150 shadow-lg" title="تصغير">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"></path></svg>
+        </button>
+        <button onclick="resetZoom()" class="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-150 shadow-lg" title="إعادة ضبط">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0h5m5.418 2a8.001 8.001 0 01-15.356 2m15.356-2h-5"></path></svg>
+        </button>
+        <button onclick="zoomIn()" class="p-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-150 shadow-lg" title="تكبير">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+        </button>
+    </div>
+
+    <!-- شاشة التحميل -->
+    <div id="loading-overlay" class="fixed inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center transition-opacity duration-500 z-[100] opacity-0 invisible">
+        <div class="flex flex-col items-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+            <p class="mt-4 text-blue-500 font-bold">جارٍ تحميل البيانات...</p>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <!-- العنوان -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-blue-600 dark:text-blue-400">مخطط دراسي وجدول كامل</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">تنظيم جدولك الدراسي وقائمة المهام</p>
+        </header>
+        
+        <!-- شريط التقدم -->
+        <div id="progress-container" class="mb-8 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-bold mb-2">تقدم المهام الأسبوعية للمذاكرة</h3>
+            <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                <div class="flex-grow bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                    <div id="progress-bar-fill" class="bg-green-500 h-3 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                </div>
+                <span id="progress-text" class="font-bold text-green-600 dark:text-green-400 w-10 text-center">0%</span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">يتم احتساب النسبة بناءً على عدد المواد المنجزة من إجمالي مواد الأسبوع.</p>
+        </div>
+
+        <!-- ألسنة العرض -->
+        <div class="border-b border-gray-200 dark:border-gray-700 mb-6 flex justify-center sticky top-12 bg-gray-50 dark:bg-gray-900 z-10 print:hidden">
+            <button id="tab-schedule" onclick="changeView('schedule')" class="tab tab-active">الجدول الدراسي اليومي</button>
+            <button id="tab-full-schedule" onclick="changeView('full-schedule')" class="tab">عرض الجدول الكامل</button>
+            <button id="tab-todo" onclick="changeView('todo')" class="tab">قائمة المهام</button>
+        </div>
+        
+        <!-- زر إعدادات الجدول -->
+        <div class="flex justify-center mb-6 print:hidden">
+            <button id="toggle-tools-btn" onclick="toggleTools()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span id="tools-button-text">إعدادات الجدول (إخفاء)</span>
+            </button>
+        </div>
+        
+        <!-- أدوات الطباعة والتنزيل (مخفية افتراضيًا) -->
+        <div id="schedule-tools" class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg mb-8 print:hidden">
+            <h3 class="text-lg font-bold mb-3 border-b pb-2 dark:border-gray-700">أدوات الجدول والتقارير</h3>
+            <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
+                <!-- اختيار لون الخلفية -->
+                <label for="print-bg-color" class="flex items-center space-x-2 rtl:space-x-reverse">
+                    <span class="text-sm dark:text-gray-300">لون خلفية التقرير/الطباعة:</span>
+                    <input type="color" id="print-bg-color" value="#f0f9ff" class="w-10 h-10 p-1 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer">
+                </label>
+
+                <!-- أزرار الإجراءات -->
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="downloadCode()" class="flex items-center gap-1 p-2 text-sm bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        تنزيل كود المصدر
+                    </button>
+                    <button onclick="downloadScheduleHtml()" class="flex items-center gap-1 p-2 text-sm bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l2 2h3a2 2 0 012 2v7M5 18h14"></path></svg>
+                        تنزيل جدول HTML
+                    </button>
+                    <button onclick="printSchedule()" class="flex items-center gap-1 p-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-150">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m10 0v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4m2 0h4m-4 0v-4m-3 4h6m-4 4h2a2 2 0 002-2v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4a2 2 0 002 2z"></path></svg>
+                        طباعة الجدول
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- عرض الجدول اليومي (شكل البطاقات) -->
+        <div id="schedule-view">
+            <!-- قائمة أيام الأسبوع -->
+            <div id="day-tabs" class="flex flex-wrap justify-center mb-6"><button class="tab  p-2 md:px-4 md:py-3 transition duration-150 rounded-lg m-1">الأحد</button><button class="tab  p-2 md:px-4 md:py-3 transition duration-150 rounded-lg m-1">الإثنين</button><button class="tab  p-2 md:px-4 md:py-3 transition duration-150 rounded-lg m-1">الثلاثاء</button><button class="tab  p-2 md:px-4 md:py-3 transition duration-150 rounded-lg m-1">الأربعاء</button><button class="tab  p-2 md:px-4 md:py-3 transition duration-150 rounded-lg m-1">الخميس</button><button class="tab tab-active p-2 md:px-4 md:py-3 transition duration-150 rounded-lg m-1">الجمعة</button><button class="tab  p-2 md:px-4 md:py-3 transition duration-150 rounded-lg m-1">السبت</button></div>
+            
+            <!-- زر إضافة مادة جديدة -->
+            <button onclick="showModal('add-schedule-modal')" class="w-full mb-6 p-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition duration-150 font-semibold">
+                + إضافة مادة/مراجعة جديدة
+            </button>
+
+            <!-- عرض المواد حسب اليوم -->
+            <div id="my-schedules-container" class="space-y-4"></div>
+            
+            <p id="no-schedule-message" class="text-center text-gray-500 dark:text-gray-400 mt-8">
+                لا توجد مواد مضافة لهذا اليوم. ابدأ بإضافة مادة جديدة!
+            </p>
+        </div>
+
+        <!-- عرض الجدول الكامل -->
+        <div id="full-schedule-view" class="hidden">
+            <h2 class="text-3xl font-bold mb-4 text-center text-blue-600 dark:text-blue-400">جدول الأسبوع الدراسي الكامل</h2>
+            <div id="full-schedule-container" class="space-y-6">
+                <!-- الجدول الكامل سيُعرض هنا بواسطة JS -->
+            </div>
+            <p id="no-full-schedule-message" class="text-center text-gray-500 dark:text-gray-400 mt-8 hidden">
+                لا توجد مواد مضافة في الجدول بعد.
+            </p>
+        </div>
+
+
+        <!-- عرض قائمة المهام -->
+        <div id="todo-view" class="hidden">
+            <!-- مدخل إضافة مهمة جديدة -->
+            <div class="flex mb-6 gap-2">
+                <input type="text" id="new-todo-text" placeholder="أضف مهمة جديدة..." class="input input-bordered flex-grow dark:bg-gray-700 dark:border-gray-600 dark:text-white rounded-lg p-3 shadow-sm">
+                <button onclick="addTodoItem()" class="p-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-150 font-semibold">
+                    إضافة
+                </button>
+            </div>
+
+            <!-- قائمة المهام -->
+            <div id="todo-list" class="space-y-3">
+                <!-- المهام ستُعرض هنا بواسطة JS -->
+            </div>
+
+            <p id="no-todo-message" class="text-center text-gray-500 dark:text-gray-400 mt-8 hidden">
+                أنت جاهز! لا توجد مهام حالياً.
+            </p>
+        </div>
+    </div>
+
+    <!-- نموذج (Modal) لإضافة/تعديل مادة دراسية -->
+    <div id="add-schedule-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 transition-opacity duration-300 invisible opacity-0 z-40">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 transform transition-transform duration-300 scale-95">
+            <h3 id="modal-title" class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">إضافة مادة جديدة</h3>
+            <form id="schedule-form">
+                <input type="hidden" id="schedule-item-id">
+
+                <label class="form-control w-full mb-3">
+                    <div class="label"><span class="label-text dark:text-gray-300">اسم المادة</span></div>
+                    <input id="schedule-subject" type="text" placeholder="مثل: كيمياء، مراجعة الفصل الأول" required="" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white p-3 rounded-lg">
+                </label>
+
+                <label class="form-control w-full mb-3">
+                    <div class="label"><span class="label-text dark:text-gray-300">الوصف / الهدف</span></div>
+                    <textarea id="schedule-description" placeholder="ماذا ستذاكر بالتحديد؟" class="textarea textarea-bordered h-24 w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white p-3 rounded-lg"></textarea>
+                </label>
+                
+                <!-- حقول الوقت الجديدة -->
+                <div class="flex gap-4 mb-3">
+                    <label class="form-control w-1/2">
+                        <div class="label"><span class="label-text dark:text-gray-300">ساعة البدء</span></div>
+                        <input id="schedule-start-time" type="time" required="" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white p-3 rounded-lg">
+                    </label>
+                    <label class="form-control w-1/2">
+                        <div class="label"><span class="label-text dark:text-gray-300">ساعة الانتهاء</span></div>
+                        <input id="schedule-end-time" type="time" required="" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white p-3 rounded-lg">
+                    </label>
+                </div>
+
+                <label class="form-control w-full mb-3">
+                    <div class="label"><span class="label-text dark:text-gray-300">اليوم</span></div>
+                    <select id="schedule-day" required="" class="select select-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white p-3 rounded-lg">
+                        <option value="السبت">السبت</option>
+                        <option value="الأحد">الأحد</option>
+                        <option value="الإثنين">الإثنين</option>
+                        <option value="الثلاثاء">الثلاثاء</option>
+                        <option value="الأربعاء">الأربعاء</option>
+                        <option value="الخميس">الخميس</option>
+                        <option value="الجمعة">الجمعة</option>
+                    </select>
+                </label>
+
+                <label class="form-control w-full mb-5">
+                    <div class="label"><span class="label-text dark:text-gray-300">رابط للمادة (اختياري)</span></div>
+                    <input id="schedule-link" type="url" placeholder="رابط زووم، يوتيوب، ملف..." class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white p-3 rounded-lg">
+                </label>
+
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="hideModal('add-schedule-modal')" class="btn p-3 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition duration-150">إلغاء</button>
+                    <button type="submit" class="btn p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-150 font-semibold">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // --------------------------------- متغيرات التطبيق ---------------------------------
+        let mySchedules = [];
+        let myTodos = [];
+        // تعيين اليوم الحالي بالعربي. إذا لم يكن متوفرًا، نختار "السبت" كافتراضي.
+        let currentDay = new Date().toLocaleDateString('ar-EG', { weekday: 'long' }) || "السبت"; 
+        const daysOfWeek = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+        
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const scheduleForm = document.getElementById('schedule-form');
+
+        // --------------------------------- وظائف الزوم ---------------------------------
+        let currentZoom = 1.0;
+        const zoomStep = 0.1;
+        const minZoom = 0.5;
+        const maxZoom = 2.0;
+
+        function updateZoom() {
+            // تطبيق التحويل (الزوم) على جسم الصفحة
+            document.body.style.transform = `scale(${currentZoom})`;
+            document.body.style.width = currentZoom > 1 ? `${100 * currentZoom}%` : '100%';
+            document.body.style.transformOrigin = 'top right';
+        }
+
+        window.zoomIn = () => {
+            if (currentZoom < maxZoom) {
+                currentZoom = Math.min(maxZoom, currentZoom + zoomStep);
+                updateZoom();
+            }
+        };
+
+        window.zoomOut = () => {
+            if (currentZoom > minZoom) {
+                currentZoom = Math.max(minZoom, currentZoom - zoomStep);
+                updateZoom();
+            }
+        };
+
+        window.resetZoom = () => {
+            currentZoom = 1.0;
+            document.body.style.transform = '';
+            document.body.style.width = '';
+            document.body.style.transformOrigin = '';
+        };
+
+        // --------------------------------- وظيفة حساب مدة المذاكرة ---------------------------------
+        function calculateDuration(startTimeStr, endTimeStr) {
+            const [startH, startM] = startTimeStr.split(':').map(Number);
+            const [endH, endM] = endTimeStr.split(':').map(Number);
+
+            let totalMinutesStart = startH * 60 + startM;
+            let totalMinutesEnd = endH * 60 + endM;
+            
+            let totalMinutes = totalMinutesEnd - totalMinutesStart;
+
+            if (totalMinutes < 0) {
+                totalMinutes += 24 * 60; // حساب إذا كانت المدة تمر بمنتصف الليل
+            }
+            
+            if (totalMinutes === 0) {
+                 return "0 دقيقة (تأكد من إدخال وقت صحيح)";
+            }
+
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+
+            let durationStr = "";
+            if (hours > 0) {
+                durationStr += `${hours} ساعة`;
+            }
+            if (minutes > 0) {
+                if (hours > 0) durationStr += " و ";
+                durationStr += `${minutes} دقيقة`;
+            }
+            
+            return durationStr.trim() || "0 دقيقة";
+        }
+
+
+        // --------------------------------- وظائف التخزين (Local Storage) ---------------------------------
+        function saveDataToLocalStorage() {
+            try {
+                localStorage.setItem('mySchedules', JSON.stringify(mySchedules));
+                localStorage.setItem('myTodos', JSON.stringify(myTodos));
+            } catch (e) {
+                console.error("خطأ في حفظ البيانات محلياً:", e);
+            }
+        }
+
+        function loadDataFromLocalStorage() {
+            try {
+                const schedulesData = localStorage.getItem('mySchedules');
+                const todosData = localStorage.getItem('myTodos');
+                if (schedulesData) {
+                    mySchedules = JSON.parse(schedulesData);
+                }
+                if (todosData) {
+                    myTodos = JSON.parse(todosData);
+                }
+            } catch (e) {
+                console.error("خطأ في تحميل البيانات محلياً:", e);
+            }
+        }
+
+        // --------------------------------- وظائف شريط التقدم ---------------------------------
+        function calculateProgress() {
+            const totalItems = mySchedules.length;
+            if (totalItems === 0) return 0;
+            
+            const completedItems = mySchedules.filter(item => item.completed).length;
+            return Math.round((completedItems / totalItems) * 100);
+        }
+
+        function renderProgressBar() {
+            const progress = calculateProgress();
+            const progressText = document.getElementById('progress-text');
+            const progressBar = document.getElementById('progress-bar-fill');
+            
+            if (progressText && progressBar) {
+                progressText.textContent = `${progress}%`;
+                progressBar.style.width = `${progress}%`;
+            }
+        }
+        
+        // --------------------------------- وظائف إخفاء/إظهار أدوات الجدول ---------------------------------
+        window.toggleTools = () => {
+            const toolsDiv = document.getElementById('schedule-tools');
+            const buttonText = document.getElementById('tools-button-text');
+            
+            if (toolsDiv.classList.contains('hidden')) {
+                toolsDiv.classList.remove('hidden');
+                buttonText.textContent = 'إعدادات الجدول (إخفاء)';
+            } else {
+                toolsDiv.classList.add('hidden');
+                buttonText.textContent = 'إعدادات الجدول (إظهار)';
+            }
+        };
+
+        // --------------------------------- وظائف المودال ---------------------------------
+        window.showModal = (id, itemId = null) => {
+            const modal = document.getElementById(id);
+            const title = document.getElementById('modal-title');
+            const subjectInput = document.getElementById('schedule-subject');
+            const descriptionInput = document.getElementById('schedule-description');
+            const dayInput = document.getElementById('schedule-day');
+            const linkInput = document.getElementById('schedule-link');
+            const idInput = document.getElementById('schedule-item-id');
+            const startTimeInput = document.getElementById('schedule-start-time');
+            const endTimeInput = document.getElementById('schedule-end-time');
+
+            if (modal) {
+                modal.classList.remove('invisible', 'opacity-0');
+                modal.classList.add('visible', 'opacity-100');
+            }
+
+            if (id === 'add-schedule-modal' && itemId) {
+                const item = mySchedules.find(s => s.id === itemId);
+                if (item) {
+                    title.textContent = 'تعديل المادة';
+                    subjectInput.value = item.subject || '';
+                    descriptionInput.value = item.description || '';
+                    dayInput.value = item.day || currentDay;
+                    linkInput.value = item.link || '';
+                    idInput.value = item.id;
+                    startTimeInput.value = item.startTime || '08:00';
+                    endTimeInput.value = item.endTime || '09:00';
+                }
+            } else if (id === 'add-schedule-modal') {
+                title.textContent = 'إضافة مادة جديدة';
+                scheduleForm.reset();
+                dayInput.value = currentDay;
+                idInput.value = '';
+                startTimeInput.value = '08:00';
+                endTimeInput.value = '09:00';
+            }
+        };
+
+        window.hideModal = (id) => {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('visible', 'opacity-100');
+                modal.classList.add('invisible', 'opacity-0');
+            }
+        };
+
+        // --------------------------------- وظائف الجدول الدراسي اليومي ---------------------------------
+        
+        const addScheduleItem = (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('schedule-item-id').value || crypto.randomUUID();
+            const subject = document.getElementById('schedule-subject').value;
+            const description = document.getElementById('schedule-description').value;
+            const day = document.getElementById('schedule-day').value;
+            const link = document.getElementById('schedule-link').value;
+            const startTime = document.getElementById('schedule-start-time').value;
+            const endTime = document.getElementById('schedule-end-time').value;
+            const duration = calculateDuration(startTime, endTime);
+            
+            const existingItem = mySchedules.find(item => item.id === id);
+            const completed = existingItem ? existingItem.completed : false;
+
+            const newItem = { id, subject, description, day, link, startTime, endTime, duration, completed };
+
+            const existingIndex = mySchedules.findIndex(item => item.id === id);
+
+            if (existingIndex > -1) {
+                mySchedules[existingIndex] = newItem;
+            } else {
+                mySchedules.push(newItem);
+            }
+
+            saveDataToLocalStorage();
+            renderMySchedules();
+            renderProgressBar(); 
+            hideModal('add-schedule-modal');
+        };
+        scheduleForm.addEventListener('submit', addScheduleItem);
+        
+        window.deleteScheduleItem = (id) => {
+             // استخدام نافذة تأكيد مخصصة (تجنباً لـ confirm() الذي لا يعمل في بيئة الكانفاس)
+             if (window.confirm("هل أنت متأكد من حذف هذه المادة؟")) {
+                 mySchedules = mySchedules.filter(item => item.id !== id);
+                 saveDataToLocalStorage();
+                 renderMySchedules();
+                 renderProgressBar();
+             }
+        };
+        
+        window.toggleScheduleCompleted = (id) => {
+            const item = mySchedules.find(t => t.id === id);
+            if (item) {
+                item.completed = !item.completed;
+                saveDataToLocalStorage();
+                renderMySchedules();
+                renderProgressBar();
+            }
+        };
+
+        // **وظيفة عرض المواد اليومية**
+        window.renderMySchedules = () => {
+            const container = document.getElementById('my-schedules-container');
+            const noMessage = document.getElementById('no-schedule-message');
+            container.innerHTML = '';
+            
+            const dayTabsContainer = document.getElementById('day-tabs');
+            dayTabsContainer.innerHTML = '';
+            
+            const sortedDays = daysOfWeek;
+            
+            // إنشاء ألسنة الأيام
+            sortedDays.forEach(day => {
+                const tabButton = document.createElement('button');
+                tabButton.textContent = day;
+                tabButton.className = `tab ${day === currentDay ? 'tab-active' : ''} p-2 md:px-4 md:py-3 transition duration-150 rounded-lg m-1`;
+                tabButton.onclick = () => {
+                    currentDay = day;
+                    renderMySchedules();
+                };
+                dayTabsContainer.appendChild(tabButton);
+            });
+
+            const filteredSchedules = mySchedules.filter(item => item.day === currentDay);
+            
+            if (filteredSchedules.length === 0) {
+                noMessage.classList.remove('hidden');
+            } else {
+                noMessage.classList.add('hidden');
+                
+                // فرز المواد حسب وقت البدء
+                filteredSchedules.sort((a, b) => {
+                    if (a.startTime < b.startTime) return -1;
+                    if (a.startTime > b.startTime) return 1;
+                    return 0;
+                });
+
+                filteredSchedules.forEach(item => {
+                    const linkButton = item.link ? 
+                        `<a href="${item.link}" target="_blank" class="text-xs font-semibold text-white bg-green-500 hover:bg-green-600 p-2 rounded-full transition duration-150 flex items-center justify-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            <span>الرابط</span>
+                        </a>` : '';
+                    
+                    const card = document.createElement('div');
+                    const completedClass = item.completed ? 'bg-green-50 dark:bg-green-900 border-green-400' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700';
+                    card.className = `${completedClass} p-5 rounded-xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col md:flex-row justify-between`;
+                    card.innerHTML = `
+                        <div class="flex-grow mb-4 md:mb-0">
+                            <h4 class="text-xl font-bold ${item.completed ? 'text-green-600 dark:text-green-400' : 'text-blue-600 dark:text-blue-400'} mb-1 flex items-center">
+                                <input type="checkbox" id="check-${item.id}" ${item.completed ? 'checked' : ''} onchange="toggleScheduleCompleted('${item.id}')" class="h-5 w-5 rounded text-blue-600 mr-3 rtl:ml-3 bg-gray-200 border-gray-400 cursor-pointer">
+                                ${item.subject}
+                            </h4>
+                            
+                            <!-- عرض الوقت والمدة -->
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mt-1">
+                                الوقت: من ${item.startTime} إلى ${item.endTime} 
+                                (<span class="text-yellow-600 dark:text-yellow-400">${item.duration}</span>)
+                            </p>
+                            
+                            <p class="text-gray-600 dark:text-gray-400 mt-2">${item.description}</p>
+                        </div>
+                        <div class="flex flex-col space-y-2 md:space-y-0 md:space-x-2 md:flex-row md:items-center">
+                            ${linkButton}
+                            <button onclick="showModal('add-schedule-modal', '${item.id}')" class="p-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition duration-150" title="تعديل">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            </button>
+                            <button onclick="deleteScheduleItem('${item.id}')" class="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-150" title="حذف">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        };
+
+        // --------------------------------- وظائف الجدول الدراسي الكامل ---------------------------------
+
+        window.renderFullSchedule = () => {
+            const container = document.getElementById('full-schedule-container');
+            const noMessage = document.getElementById('no-full-schedule-message');
+            container.innerHTML = '';
+
+            if (mySchedules.length === 0) {
+                noMessage.classList.remove('hidden');
+                return;
+            } else {
+                noMessage.classList.add('hidden');
+            }
+            
+            daysOfWeek.forEach(day => {
+                const daySchedules = mySchedules.filter(item => item.day === day).sort((a, b) => {
+                    if (a.startTime < b.startTime) return -1;
+                    if (a.startTime > b.startTime) return 1;
+                    return 0;
+                });
+
+                if (daySchedules.length > 0) {
+                    const dayCard = document.createElement('div');
+                    dayCard.className = 'bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg border border-gray-300 dark:border-gray-700';
+                    dayCard.innerHTML = `<h3 class="text-2xl font-bold mb-3 text-gray-800 dark:text-gray-200 border-b pb-2">${day}</h3>`;
+
+                    daySchedules.forEach(item => {
+                        const completedColor = item.completed ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400';
+                        const completedText = item.completed ? 'مُنجز' : 'قيد الانتظار';
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'py-3 border-b dark:border-gray-700 last:border-b-0 flex justify-between items-center';
+                        itemDiv.innerHTML = `
+                            <div>
+                                <p class="text-lg font-semibold text-blue-700 dark:text-blue-400">${item.subject}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${item.description}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">من ${item.startTime} إلى ${item.endTime} (${item.duration})</p>
+                            </div>
+                            <span class="font-bold text-sm ${completedColor}">${completedText}</span>
+                        `;
+                        dayCard.appendChild(itemDiv);
+                    });
+
+                    container.appendChild(dayCard);
+                }
+            });
+        };
+
+
+        // --------------------------------- وظائف قائمة المهام ---------------------------------
+        window.addTodoItem = () => {
+            const input = document.getElementById('new-todo-text');
+            const text = input.value.trim();
+            
+            if (text) {
+                const newItem = {
+                    id: crypto.randomUUID(),
+                    text: text,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+                myTodos.push(newItem);
+                saveDataToLocalStorage();
+                renderTodoList();
+                input.value = '';
+            }
+        };
+
+        window.toggleTodoCompleted = (id) => {
+            const item = myTodos.find(t => t.id === id);
+            if (item) {
+                item.completed = !item.completed;
+                saveDataToLocalStorage();
+                renderTodoList();
+            }
+        };
+
+        window.deleteTodoItem = (id) => {
+            if (window.confirm("هل أنت متأكد من حذف هذه المهمة؟")) {
+                myTodos = myTodos.filter(item => item.id !== id);
+                saveDataToLocalStorage();
+                renderTodoList();
+            }
+        };
+
+        window.renderTodoList = () => {
+            const list = document.getElementById('todo-list');
+            const noMessage = document.getElementById('no-todo-message');
+            list.innerHTML = '';
+
+            if (myTodos.length === 0) {
+                noMessage.classList.remove('hidden');
+            } else {
+                noMessage.classList.add('hidden');
+                
+                myTodos.sort((a, b) => a.completed - b.completed || new Date(b.createdAt) - new Date(a.createdAt));
+
+                myTodos.forEach(item => {
+                    const itemClass = item.completed ? 'opacity-60 line-through' : 'opacity-100';
+                    const card = document.createElement('div');
+                    card.className = `flex items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 transition duration-300 ${itemClass}`;
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-3 rtl:space-x-reverse flex-grow cursor-pointer" onclick="toggleTodoCompleted('${item.id}')">
+                            <input type="checkbox" ${item.completed ? 'checked' : ''} class="checkbox h-5 w-5 rounded-full text-blue-600 dark:text-blue-400 bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-600">
+                            <span class="text-base">${item.text}</span>
+                        </div>
+                        <button onclick="deleteTodoItem('${item.id}')" class="p-1 text-red-500 hover:text-red-700 transition duration-150 rounded-full" title="حذف">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    `;
+                    list.appendChild(card);
+                });
+            }
+        };
+
+        // --------------------------------- وظائف أدوات التصدير والطباعة ---------------------------------
+        
+        // تنزيل كود مصدر الموقع (HTML)
+        window.downloadCode = () => {
+            const content = document.documentElement.outerHTML;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'study_planner_source.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+        
+        // إنشاء محتوى HTML نظيف للجدول الكامل
+        window.generateScheduleHTML = (bgColor) => {
+            let htmlContent = `
+                <!DOCTYPE html>
+                <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>الجدول الدراسي - تقرير</title>
+                    <style>
+                        body { 
+                            font-family: 'Cairo', sans-serif; 
+                            background-color: ${bgColor}; 
+                            margin: 20px; 
+                            color: #333; 
+                            padding: 20px;
+                        }
+                        h1 { color: #1e40af; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; margin-bottom: 25px; text-align: center; }
+                        .day-schedule { 
+                            margin-bottom: 30px; 
+                            border: 1px solid #ddd; 
+                            padding: 15px; 
+                            border-radius: 12px; 
+                            background-color: #fff; 
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+                        }
+                        .day-schedule h2 { 
+                            color: #4b5563; 
+                            margin-top: 0; 
+                            font-size: 1.8rem; 
+                            border-bottom: 1px dashed #e5e7eb; 
+                            padding-bottom: 5px; 
+                            margin-bottom: 15px; 
+                            font-weight: bold;
+                        }
+                        .subject-item { 
+                            display: flex; 
+                            justify-content: space-between; 
+                            align-items: center; 
+                            padding: 10px 0; 
+                            border-bottom: 1px dotted #e5e7eb; 
+                        }
+                        .subject-details { flex-grow: 1; margin-left: 15px; rtl:margin-right: 15px; }
+                        .subject-details p { margin: 3px 0; font-size: 0.95rem; }
+                        .subject-details .title { font-weight: bold; color: #10b981; font-size: 1.1rem; }
+                        .subject-details .time { font-weight: 500; color: #f59e0b; }
+                        .subject-details .duration { color: #ef4444; font-size: 0.85rem; }
+                        .status { 
+                            font-weight: bold; 
+                            padding: 5px 10px; 
+                            border-radius: 6px; 
+                            font-size: 0.8rem;
+                            white-space: nowrap;
+                        }
+                        .completed { background-color: #d1fae5; color: #065f46; }
+                        .pending { background-color: #fef3c7; color: #b45309; }
+                        @media print {
+                            body { background-color: white !important; -webkit-print-color-adjust: exact; color-adjust: exact; }
+                            .day-schedule { border: 1px solid #ccc; box-shadow: none; page-break-inside: avoid; }
+                            h1 { color: black !important; border-bottom: 2px solid #333; }
+                        }
+                    </style>
+                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+                </head>
+                <body>
+                    <h1>الجدول الدراسي الكامل</h1>
+            `;
+
+            daysOfWeek.forEach(day => {
+                const daySchedules = mySchedules.filter(item => item.day === day).sort((a, b) => {
+                    if (a.startTime < b.startTime) return -1;
+                    if (a.startTime > b.startTime) return 1;
+                    return 0;
+                });
+
+                if (daySchedules.length > 0) {
+                    htmlContent += `<div class="day-schedule"><h2>${day}</h2>`;
+                    daySchedules.forEach(item => {
+                        const statusClass = item.completed ? 'completed' : 'pending';
+                        const statusText = item.completed ? 'مُنجز' : 'قيد الانتظار';
+                        htmlContent += `
+                            <div class="subject-item">
+                                <div class="subject-details">
+                                    <p class="title">${item.subject}</p>
+                                    <p>${item.description}</p>
+                                    <p class="time">الوقت: من ${item.startTime} إلى ${item.endTime} <span class="duration">(${item.duration})</span></p>
+                                </div>
+                                <div class="status ${statusClass}">${statusText}</div>
+                            </div>
+                        `;
+                    });
+                    htmlContent += `</div>`;
+                }
+            });
+
+            htmlContent += `</body></html>`;
+            return htmlContent;
+        };
+
+        // تنزيل الجدول كملف HTML
+        window.downloadScheduleHtml = () => {
+            const bgColor = document.getElementById('print-bg-color').value;
+            const content = generateScheduleHTML(bgColor);
+            const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'study_schedule_report.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        // طباعة الجدول
+        window.printSchedule = () => {
+            const bgColor = document.getElementById('print-bg-color').value;
+            const content = generateScheduleHTML(bgColor);
+            
+            const printWindow = window.open('', '_blank', 'height=600,width=800');
+            printWindow.document.write(content);
+            printWindow.document.close();
+            
+            printWindow.onload = () => {
+                printWindow.print();
+            };
+        };
+        
+        // --------------------------------- وظيفة تبديل العرض الرئيسية ---------------------------------
+        window.changeView = (view) => {
+            const views = {
+                'schedule': document.getElementById('schedule-view'),
+                'full-schedule': document.getElementById('full-schedule-view'),
+                'todo': document.getElementById('todo-view')
+            };
+            const tabs = {
+                'schedule': document.getElementById('tab-schedule'),
+                'full-schedule': document.getElementById('tab-full-schedule'),
+                'todo': document.getElementById('tab-todo')
+            };
+
+            for (const key in views) {
+                if (key === view) {
+                    views[key].classList.remove('hidden');
+                    tabs[key].classList.add('tab-active');
+                } else {
+                    views[key].classList.add('hidden');
+                    tabs[key].classList.remove('tab-active');
+                }
+            }
+            
+            // إعادة عرض المحتوى عند التبديل
+            if (view === 'schedule') {
+                renderMySchedules();
+            } else if (view === 'full-schedule') {
+                renderFullSchedule();
+            } else if (view === 'todo') {
+                renderTodoList();
+            }
+            
+            // إخفاء الأدوات دائمًا عند تبديل الألسنة لضمان النظافة
+            const toolsDiv = document.getElementById('schedule-tools');
+            const buttonText = document.getElementById('tools-button-text');
+            if (!toolsDiv.classList.contains('hidden')) {
+                toolsDiv.classList.add('hidden');
+                buttonText.textContent = 'إعدادات الجدول (إظهار)';
+            }
+        };
+
+        // --------------------------------- تهيئة التطبيق ---------------------------------
+        function initApp() {
+            // تحميل البيانات من التخزين المحلي
+            loadDataFromLocalStorage();
+
+            // إخفاء شاشة التحميل
+            loadingOverlay.classList.add('opacity-0', 'invisible');
+
+            // عرض الواجهة الافتراضية
+            // التأكد من أن اليوم الحالي موجود في قائمة الأيام، وإلا نختار الأحد كافتراضي
+            if (!daysOfWeek.includes(currentDay)) {
+                currentDay = 'الأحد';
+            }
+            changeView('schedule');
+            renderProgressBar(); 
+        }
+
+        // تشغيل التهيئة عند تحميل الصفحة
+        window.onload = initApp;
+
+    </script>
+
+
+
+
+</body></html>
